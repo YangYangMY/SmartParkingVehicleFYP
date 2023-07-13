@@ -11,8 +11,7 @@ from datetime import datetime
 if torch.cuda.is_available():
     print("Running on GPU")
     # Set to run on GPU device
-    torch.cuda.set_device(0)
-    print(torch.cuda.device_count())
+    #torch.cuda.set_device(0)
 else:
     print("Running on CPU")
 
@@ -55,17 +54,17 @@ car_temp8 = {} #Left Cam Middle Entry Line
 
 
 # Open the video file 1
-video_path1 = "../VideoFootage/rightCam3.mp4"
+video_path1 = "../VideoFootage/rightCam4.mp4"
 cap1 = cv2.VideoCapture(video_path1)
 mask1 = cv2.imread("maskRightCamera.png")
 
 # Open the video file 2
-video_path2 = "../VideoFootage/midCam3.mp4"
+video_path2 = "../VideoFootage/midCam4.mp4"
 cap2 = cv2.VideoCapture(video_path2)
 mask2 = cv2.imread("maskMiddleCamera.png")
 
 # Open the video file 3
-video_path3 = "../VideoFootage/leftCam3.mp4"
+video_path3 = "../VideoFootage/leftCam4.mp4"
 cap3 = cv2.VideoCapture(video_path3)
 mask3 = cv2.imread("maskLeftCamera3.png")
 
@@ -215,18 +214,6 @@ while cap1.isOpened() and cap2.isOpened() and cap3.isOpened():
                     car_temp3[id]["bbox"] = (x1, y1, x2, y2)
                     car_temp3[id]["entryTime"] = datetime.now().strftime("%d-%m-%Y %H:%M:%S")
                     car_temp3[id]["currentLocation"] = "RightCam"
-
-        # Draw corner rectangle for specific id
-        if len(totalCount) > 0:
-            specific_id = totalCount[-1]  # Get the last appended id
-            for result in resultsTracker:
-                x1, y1, x2, y2, id = result
-                if id == specific_id:
-                    x1, y1, x2, y2 = int(x1), int(y1), int(x2), int(y2)
-                    w, h = x2 - x1, y2 - y1
-                    cvzone.cornerRect(frame1, (x1, y1, w, h), l=9, rt=2, colorR=(0, 255, 0))
-                    #cvzone.putTextRect(frame1, f' {int(id)}', (max(0, x1), max(35, y1)),
-                                        #scale=2, thickness=3, offset=10)
 
         # Read a frame from the video
         success2, frame2 = cap2.read()
@@ -521,15 +508,14 @@ while cap1.isOpened() and cap2.isOpened() and cap3.isOpened():
                                     car_dict[id2]["currentLocation"] = "LeftCam"
                                     del car_temp5[id2]
 
-                    if LeftCamBottomExitLine[0] < cx < LeftCamBottomExitLine[2] and LeftCamBottomExitLine[1] > cy > \
-                            LeftCamBottomExitLine[3]:
-                        cv2.line(frame3, (LeftCamBottomExitLine[0], LeftCamBottomExitLine[1]),
+                if LeftCamBottomExitLine[0] < cx < LeftCamBottomExitLine[2] and LeftCamBottomExitLine[1] > cy > LeftCamBottomExitLine[3] :
+                    cv2.line(frame3, (LeftCamBottomExitLine[0], LeftCamBottomExitLine[1]),
                                  (LeftCamBottomExitLine[2], LeftCamBottomExitLine[3]), (0, 255, 0), 5)
 
         # Resize the annotated frame to a maximum width and height of 600 pixels
-        resized_frame1 = cv2.resize(frame1, (600, 400))
-        resized_frame2 = cv2.resize(frame2, (600, 400))
-        resized_frame3 = cv2.resize(frame3, (600, 400))
+        resized_frame1 = cv2.resize(frame1, (800, 600))
+        resized_frame2 = cv2.resize(frame2, (800, 600))
+        resized_frame3 = cv2.resize(frame3, (800, 600))
 
         # Display the frame rate on the left top of the screen
         cv2.putText(resized_frame1, f' Count: {len(totalCount)}', (50, 70), cv2.FONT_HERSHEY_SIMPLEX, 0.8, (0, 0, 255), 2)
