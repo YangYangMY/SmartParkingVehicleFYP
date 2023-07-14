@@ -98,6 +98,7 @@ MiddleCamBottomExitLine = [590, 510, 490, 885]
 
 # Store the coordinates for left camera
 LeftCamMiddleEntryLine = [1700, 390, 1670, 420]
+LeftCamMiddleExitLine = [1000, 390, 1000, 420]
 
 LeftCamBottomEntryLine = [1300, 620, 1200, 880]
 LeftCamBottomExitLine = [300, 400, 550, 340]
@@ -420,6 +421,9 @@ while cap1.isOpened() and cap2.isOpened() and cap3.isOpened():
             resultsTracker3 = tracker3.update(detections3)
             cv2.line(frame3, (LeftCamMiddleEntryLine[0], LeftCamMiddleEntryLine[1]),
                      (LeftCamMiddleEntryLine[2], LeftCamMiddleEntryLine[3]), (0, 0, 255), 5)
+            cv2.line(frame3, (LeftCamMiddleExitLine[0], LeftCamMiddleExitLine[1]),
+                     (LeftCamMiddleExitLine[2], LeftCamMiddleExitLine[3]), (0, 0, 255), 5)
+
             cv2.line(frame3, (LeftCamBottomEntryLine[0], LeftCamBottomEntryLine[1]),
                      (LeftCamBottomEntryLine[2], LeftCamBottomEntryLine[3]), (0, 0, 255), 5)
             cv2.line(frame3, (LeftCamBottomExitLine[0], LeftCamBottomExitLine[1]),
@@ -511,6 +515,8 @@ while cap1.isOpened() and cap2.isOpened() and cap3.isOpened():
                 if LeftCamBottomExitLine[0] < cx < LeftCamBottomExitLine[2] and LeftCamBottomExitLine[1] > cy > LeftCamBottomExitLine[3] :
                     cv2.line(frame3, (LeftCamBottomExitLine[0], LeftCamBottomExitLine[1]),
                                  (LeftCamBottomExitLine[2], LeftCamBottomExitLine[3]), (0, 255, 0), 5)
+                    if id in car_dict:
+                        car_dict[id]["exitTime"] = datetime.now().strftime("%d-%m-%Y %H:%M:%S")
 
         # Resize the annotated frame to a maximum width and height of 600 pixels
         resized_frame1 = cv2.resize(frame1, (800, 600))
