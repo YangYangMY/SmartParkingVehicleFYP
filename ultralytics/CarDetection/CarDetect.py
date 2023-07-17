@@ -6,12 +6,11 @@ import timeit
 import cvzone
 from CarDetection.sort import *
 from datetime import datetime
+from config import *
 
 
 if torch.cuda.is_available():
     print("Running on GPU")
-    # Set to run on GPU device
-    #torch.cuda.set_device(0)
 else:
     print("Running on CPU")
 
@@ -19,89 +18,20 @@ current_time = datetime.now().strftime("%d-%m-%Y %H:%M:%S")
 print("Current time:", current_time)
 
 
-# Load the YOLO v8 pre-trained model
-modelm = YOLO('../Models/yolov8m.pt')
-modelm.to('cuda')
-modelx = YOLO('../Models/yolov8x.pt')
-modelx.to('cuda')
+def RGB(event, x, y, flags, param):
+    if event == cv2.EVENT_MOUSEMOVE:
+        colorsBGR = [x, y]
+        print(colorsBGR)
 
 
-# Define the list of classes that we want to detect
-classNames = ["person", "bicycle", "car", "motorbike", "aeroplane", "bus", "train", "truck", "boat",
-              "traffic light", "fire hydrant", "stop sign", "parking meter", "bench", "bird", "cat",
-              "dog", "horse", "sheep", "cow", "elephant", "bear", "zebra", "giraffe", "backpack", "umbrella",
-              "handbag", "tie", "suitcase", "frisbee", "skis", "snowboard", "sports ball", "kite", "baseball bat",
-              "baseball glove", "skateboard", "surfboard", "tennis racket", "bottle", "wine glass", "cup",
-              "fork", "knife", "spoon", "bowl", "banana", "apple", "sandwich", "orange", "broccoli",
-              "carrot", "hot dog", "pizza", "donut", "cake", "chair", "sofa", "pottedplant", "bed",
-              "diningtable", "toilet", "tvmonitor", "laptop", "mouse", "remote", "keyboard", "cell phone",
-              "microwave", "oven", "toaster", "sink", "refrigerator", "book", "clock", "vase", "scissors",
-              "teddy bear", "hair drier", "toothbrush"
-              ]
-#Store Car Dictionary
-copy_car_dict = {"carPlate": "unknown" ,"bbox": "unknown", "entryTime": "unknown", "exitTime": "unknown", "status": "moving", "currentLocation": "unknown"}
-car_dict = {}
 
-#Temporary Car Dictionary
-car_temp = {} #Right Cam Bottom Exit Line
-car_temp2 = {} #Middle Cam Bottom Entry Line
-car_temp3 = {} #Right Cam Middle Exit Line
-car_temp4 = {} #Middle Cam Middle Entry Line
-car_temp5 = {} #Middle Cam Bottom Exit Line
-car_temp6 = {} #Left Cam Bottom Entry Line
-car_temp7 = {} #Middle Cam Middle Exit Line
-car_temp8 = {} #Left Cam Middle Entry Line
-
-
-# Open the video file 1
-video_path1 = "../VideoFootage/rightCam4.mp4"
-cap1 = cv2.VideoCapture(video_path1)
-mask1 = cv2.imread("maskRightCamera.png")
-
-# Open the video file 2
-video_path2 = "../VideoFootage/midCam4.mp4"
-cap2 = cv2.VideoCapture(video_path2)
-mask2 = cv2.imread("maskMiddleCamera.png")
-
-# Open the video file 3
-video_path3 = "../VideoFootage/leftCam4.mp4"
-cap3 = cv2.VideoCapture(video_path3)
-mask3 = cv2.imread("maskLeftCamera3.png")
 
 # Check if video files were opened successfully
 if not cap1.isOpened() or not cap2.isOpened() or not cap3.isOpened():
     print("Error opening video files")
     exit()
 
-#Tracking
-tracker = Sort(max_age=120, min_hits=5, iou_threshold=0.3)
-tracker2 = Sort(max_age=120, min_hits=5, iou_threshold=0.3)
-tracker3 = Sort(max_age=120, min_hits=5, iou_threshold=0.3)
 
-
-# Store the number of cars that crossed the line
-totalCount = []
-
-
-# Store the coordinates for right camera
-RightCamEntryLine = [1020, 175, 1157, 158]
-RightCamMiddleLine = [700, 220, 730, 250]
-RightCamBottomLine = [930, 430, 1180, 550]
-
-# Store the coordinates for middle camera
-MiddleCamMiddleEntryLine = [1780, 170, 1810, 210]
-MiddleCamMiddleExitLine = [840, 178, 860, 230]
-
-MiddleCamBottomEntryLine = [1830, 510, 1800, 880]
-MiddleCamBottomExitLine = [590, 510, 490, 885]
-
-
-# Store the coordinates for left camera
-LeftCamMiddleEntryLine = [1700, 390, 1670, 420]
-LeftCamMiddleExitLine = [1000, 390, 1000, 420]
-
-LeftCamBottomEntryLine = [1300, 620, 1200, 880]
-LeftCamBottomExitLine = [300, 400, 550, 340]
 
 # Loop through the video frames
 while cap1.isOpened() and cap2.isOpened() and cap3.isOpened():
@@ -137,9 +67,6 @@ while cap1.isOpened() and cap2.isOpened() and cap3.isOpened():
                 currentClass = classNames[cls]
 
                 if currentClass == "car" and conf > 0.3:
-                    #cvzone.putTextRect(frame1, f'{classNames[cls]} {conf}', (max(0, x1), max(35, y1)),
-                   #                scale=0.9, thickness=1, offset=5)
-                   # cvzone.cornerRect(frame1, (x1, y1, w, h), l=9, rt=5)
                     currentArray = np.array([x1,y1,x2,y2,conf])
                     detections = np.vstack((detections, currentArray))
 
@@ -153,11 +80,9 @@ while cap1.isOpened() and cap2.isOpened() and cap3.isOpened():
         for results in resultsTracker:
             x1,y1,x2,y2,id = results
             x1, y1, x2, y2 = int(x1), int(y1), int(x2), int(y2)
-            #print(results)
             w, h = x2 - x1, y2 - y1
             cx, cy = x1 + w // 2, y1 + h // 2
 
-          #  cvzone.cornerRect(frame1, (x1, y1, w, h), l=9, rt=2, colorR=(255,0,255))
             cvzone.putTextRect(frame1, f' {int(id)}', (max(0, x1), max(35, y1)),
                                scale=2, thickness=3, offset=10)
             cv2.circle(frame1, (cx, cy), 5, (255, 0, 255), cv2.FILLED)
@@ -211,10 +136,16 @@ while cap1.isOpened() and cap2.isOpened() and cap3.isOpened():
                         car_dict[id]["carPlate"] = "test"
                 else:
                     # Add a new entry to the dictionary for the new car ID
-                    car_temp3[id] = copy_car_dict.copy()
-                    car_temp3[id]["bbox"] = (x1, y1, x2, y2)
-                    car_temp3[id]["entryTime"] = datetime.now().strftime("%d-%m-%Y %H:%M:%S")
-                    car_temp3[id]["currentLocation"] = "RightCam"
+                    for results2 in resultsTracker2:
+                        x3, y3, x4, y4, id2 = results2
+                        if id in car_temp3 and id2 in car_temp4:
+                            if car_temp3[id]["entryTime"] != car_temp4[id2]["entryTime"]:
+                                car_temp3[id] = copy_car_dict.copy()
+                                car_temp3[id]["bbox"] = (x1, y1, x2, y2)
+                                car_temp3[id]["entryTime"] = datetime.now().strftime("%d-%m-%Y %H:%M:%S")
+                                car_temp3[id]["currentLocation"] = "RightCam"
+
+            cv2.polylines(frame1, [np.array(ParkingLot_A1, np.int32)], True, (0, 0, 255), 2)
 
         # Read a frame from the video
         success2, frame2 = cap2.read()
@@ -247,9 +178,6 @@ while cap1.isOpened() and cap2.isOpened() and cap3.isOpened():
                     currentClass = classNames[cls]
 
                     if currentClass == "car" and conf > 0.3:
-                        #cvzone.putTextRect(frame2, f'{classNames[cls]} {conf}', (max(0, x1), max(35, y1)),
-                        #                scale=2, thickness=2, offset=5)
-                        #cvzone.cornerRect(frame2, (x1, y1, w, h), l=9, rt=5)
                         currentArray2 = np.array([x1, y1, x2, y2, conf])
                         detections2 = np.vstack((detections2, currentArray2))
 
@@ -267,9 +195,7 @@ while cap1.isOpened() and cap2.isOpened() and cap3.isOpened():
             for results in resultsTracker2:
                 x1, y1, x2, y2, id = results
                 x1, y1, x2, y2 = int(x1), int(y1), int(x2), int(y2)
-                #print(results)
                 w, h = x2 - x1, y2 - y1
-                #cvzone.cornerRect(frame2, (x1, y1, w, h), l=9, rt=2, colorR=(255,0,255))
                 cvzone.putTextRect(frame2, f' {int(id)}', (max(0, x1), max(35, y1)),
                                      scale=2, thickness=3, offset=10)
 
@@ -367,20 +293,6 @@ while cap1.isOpened() and cap2.isOpened() and cap3.isOpened():
                         car_temp5[id]["currentLocation"] = "MiddleCam"
 
 
-            print(car_dict)
-
-            #Bottom Lane
-            print("1:",car_temp) #Right Cam Exit
-            print("2:",car_temp2) #middle Cam Entry
-            print("5:",car_temp5) #Middle Cam Exit
-            print("6:",car_temp6) #Left Cam Entry
-
-            #Middle Lane
-            print("3:",car_temp3) #Right Cam Exit
-            print("4:",car_temp4) #Middle Cam Entry
-            print("7:", car_temp7) #Middle Cam Exit
-            print("8:", car_temp8) #Left Cam Entry
-
             # Read a frame from the video
             success3, frame3 = cap3.read()
 
@@ -432,9 +344,7 @@ while cap1.isOpened() and cap2.isOpened() and cap3.isOpened():
             for results in resultsTracker3:
                 x1, y1, x2, y2, id = results
                 x1, y1, x2, y2 = int(x1), int(y1), int(x2), int(y2)
-                # print(results)
                 w, h = x2 - x1, y2 - y1
-                # cvzone.cornerRect(frame2, (x1, y1, w, h), l=9, rt=2, colorR=(255,0,255))
                 cvzone.putTextRect(frame3, f' {int(id)}', (max(0, x1), max(35, y1)),
                                    scale=2, thickness=3, offset=10)
 
@@ -518,8 +428,28 @@ while cap1.isOpened() and cap2.isOpened() and cap3.isOpened():
                     if id in car_dict:
                         car_dict[id]["exitTime"] = datetime.now().strftime("%d-%m-%Y %H:%M:%S")
 
+                if LeftCamMiddleExitLine[0] > cx > LeftCamMiddleExitLine[2] and LeftCamMiddleExitLine[1] < cy < LeftCamMiddleExitLine[3]:
+                    cv2.line(frame3, (LeftCamMiddleExitLine[0], LeftCamMiddleExitLine[1]),
+                                 (LeftCamMiddleExitLine[2], LeftCamMiddleExitLine[3]), (0, 255, 0), 5)
+                    if id in car_dict:
+                        car_dict[id]["exitTime"] = datetime.now().strftime("%d-%m-%Y %H:%M:%S")
+
+        #print(car_dict)
+
+        # Bottom Lane
+        #print("1:", car_temp)  # Right Cam Exit
+        #print("2:", car_temp2)  # middle Cam Entry
+        #print("5:", car_temp5)  # Middle Cam Exit
+        #print("6:", car_temp6)  # Left Cam Entry
+
+        # Middle Lane
+        #print("3:", car_temp3)  # Right Cam Exit
+        #print("4:", car_temp4)  # Middle Cam Entry
+        #print("7:", car_temp7)  # Middle Cam Exit
+        #print("8:", car_temp8)  # Left Cam Entry
+
         # Resize the annotated frame to a maximum width and height of 600 pixels
-        resized_frame1 = cv2.resize(frame1, (800, 600))
+        resized_frame1 = cv2.resize(frame1, (1000, 800))
         resized_frame2 = cv2.resize(frame2, (800, 600))
         resized_frame3 = cv2.resize(frame3, (800, 600))
 
@@ -539,11 +469,14 @@ while cap1.isOpened() and cap2.isOpened() and cap3.isOpened():
                     (0, 0, 255), 2)
 
         # Combine the frames side by side
-        combined_frame = cv2.hconcat([resized_frame2, resized_frame1])
+        #combined_frame = cv2.hconcat([resized_frame2, resized_frame1])
 
         # Display the combined frame
-        cv2.imshow("Combined Videos", combined_frame)
-        cv2.imshow("Combined Videos 2", resized_frame3)
+        #cv2.imshow("Combined Videos", combined_frame)
+        cv2.imshow("temp1", frame1)
+        #cv2.imshow("Combined Videos 2", resized_frame3)
+        #cv2.setMouseCallback('Combined Videos 2', RGB)
+        cv2.setMouseCallback('temp1', RGB)
 
         # Break the loop if 'q' is pressed
         if cv2.waitKey(1) & 0xFF == ord("q"):
