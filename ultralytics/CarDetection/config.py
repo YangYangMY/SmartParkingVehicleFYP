@@ -6,7 +6,6 @@ import timeit
 import cvzone
 from CarDetection.sort import *
 from datetime import datetime
-from config import *
 
 # Define the list of classes that we want to detect
 classNames = ["person", "bicycle", "car", "motorbike", "aeroplane", "bus", "train", "truck", "boat",
@@ -86,9 +85,21 @@ LeftCamBottomExitLine = [300, 400, 550, 340]
 
 #Store each Park Lot Information
 #A1- A20, B1- B20, C1- C15, D1- D19
-ParkingLot_sample = {"carPlate": "unknown","duration": "unknown"}
 ParkingLot = {}
+ParkingLot_empty = {"carId": "unknown","firstDetected": "unknown", "duration": "unknown", "parked": "no"}
+for i in range(20):
+    i += 1
+    ParkingLot['A'+ str(i)] = ParkingLot_empty.copy()
+    ParkingLot['B'+ str(i)] = ParkingLot_empty.copy()
 
+for i in range(15):
+    i += 1
+    ParkingLot['C'+ str(i)] = ParkingLot_empty.copy()
+
+for i in range(19):
+    i += 1
+    ParkingLot['D'+ str(i)] = ParkingLot_empty.copy()
 
 #Store Location for each Parking Lot
 ParkingLot_A1 = [(837,205),(795,216),(746,186),(787,172)]
+ParkingLot_A2 = [(837,205),(795,216),(746,186),(787,172)]

@@ -147,6 +147,23 @@ while cap1.isOpened() and cap2.isOpened() and cap3.isOpened():
 
             cv2.polylines(frame1, [np.array(ParkingLot_A1, np.int32)], True, (0, 0, 255), 2)
 
+            #Parking Lot A1 - A20
+            resultsA1=cv2.pointPolygonTest(np.array(ParkingLot_A1,np.int32),((cx,cy)),False)
+            if resultsA1>=0:
+                cv2.rectangle(frame1, (x1, y1), (x2, y2), (0, 255, 0), 2)
+                if id == ParkingLot['A1']["carId"]:
+                    ParkingLot['A1']["duration"] = (datetime.now() - ParkingLot['A1']["firstDetected"]).seconds
+                    if ParkingLot['A1']["duration"] > 30:
+                        ParkingLot['A1']["parked"] = "yes"
+                        car_dict[id]["status"] = "parked"
+                    else:
+                        ParkingLot['A1']["parked"] = "no"
+                        car_dict[id]["status"] = "moving"
+                else:
+                    ParkingLot['A1'] = {"carId": id,"firstDetected": datetime.now(), "duration": "unknown", "parked": "no"}
+                    car_dict[id]["status"] = "moving"
+
+
         # Read a frame from the video
         success2, frame2 = cap2.read()
 
@@ -435,7 +452,7 @@ while cap1.isOpened() and cap2.isOpened() and cap3.isOpened():
                         car_dict[id]["exitTime"] = datetime.now().strftime("%d-%m-%Y %H:%M:%S")
 
         #print(car_dict)
-
+        print(ParkingLot)
         # Bottom Lane
         #print("1:", car_temp)  # Right Cam Exit
         #print("2:", car_temp2)  # middle Cam Entry
