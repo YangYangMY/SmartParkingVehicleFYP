@@ -83,8 +83,8 @@ while cap1.isOpened() and cap2.isOpened() and cap3.isOpened():
             w, h = x2 - x1, y2 - y1
             cx, cy = x1 + w // 2, y1 + h // 2
 
-            #cvzone.putTextRect(frame1, f' {int(id)}', (max(0, x1), max(35, y1)),
-                               #scale=2, thickness=3, offset=10)
+            cvzone.putTextRect(frame1, f' {int(id)}', (max(0, x1), max(35, y1)),
+                               scale=2, thickness=3, offset=10)
             cv2.circle(frame1, (cx, cy), 5, (255, 0, 255), cv2.FILLED)
 
 
@@ -148,65 +148,34 @@ while cap1.isOpened() and cap2.isOpened() and cap3.isOpened():
 
 
             #Parking Lot A1 - A20
-            cv2.polylines(frame1, [np.array(ParkingLot_A1, np.int32)], True, (0, 0, 255), 2)
-            resultsA1=cv2.pointPolygonTest(np.array(ParkingLot_A1,np.int32),((cx,cy)),False)
+            cv2.polylines(frame1, [np.array(ParkingLot_D1, np.int32)], True, (0, 0, 255), 2)
+            resultsA1=cv2.pointPolygonTest(np.array(ParkingLot_D1,np.int32),((cx,cy)),False)
             if resultsA1>=0:
-                if id == ParkingLot['A1']["carId"]:
-                    ParkingLot['A1']["duration"] = (datetime.now() - ParkingLot['A1']["firstDetected"]).seconds
-                    if ParkingLot['A1']["duration"] > 30:
-                        ParkingLot['A1']["parked"] = "yes"
+                if car_dict[id]["parkingLot"] == 'D1':
+                    car_dict[id]["duration"] = (datetime.now() - car_dict[id]["parkingDetected"]).seconds
+                    if car_dict[id]["duration"] > 30:
                         car_dict[id]["status"] = "parked"
+                        if car_dict[id]["status"] == "parked":
+                            ParkingLot['D1']["parked"] = "yes"
+                            ParkingLot['D1']["carId"] = id
+                        else:
+                            ParkingLot['D1']["parked"] = "no"
+                            ParkingLot['D1']["carId"] = "unknown"
                     else:
-                        ParkingLot['A1']["parked"] = "no"
                         car_dict[id]["status"] = "moving"
                 else:
-                    ParkingLot['A1'] = {"carId": id,"firstDetected": datetime.now(), "duration": "unknown", "parked": "no"}
+                    car_dict[id]["parkingDetected"] = datetime.now()
+                    car_dict[id]["parkingLot"] = 'D1'
+                    ParkingLot['D1'] = {"carId": "unknown", "parked": "no"}
                     car_dict[id]["status"] = "moving"
 
-            cv2.polylines(frame1, [np.array(ParkingLot_A2, np.int32)], True, (0, 0, 255), 2)
-            resultsA2 = cv2.pointPolygonTest(np.array(ParkingLot_A2, np.int32), ((cx, cy)), False)
-            if resultsA2>=0:
-                if id == ParkingLot['A2']["carId"]:
-                    ParkingLot['A2']["duration"] = (datetime.now() - ParkingLot['A2']["firstDetected"]).seconds
-                    if ParkingLot['A2']["duration"] > 30:
-                        ParkingLot['A2']["parked"] = "yes"
-                        car_dict[id]["status"] = "parked"
-                    else:
-                        ParkingLot['A2']["parked"] = "no"
-                        car_dict[id]["status"] = "moving"
-                else:
-                    ParkingLot['A2'] = {"carId": id,"firstDetected": datetime.now(), "duration": "unknown", "parked": "no"}
-                    car_dict[id]["status"] = "moving"
+            cv2.polylines(frame1, [np.array(ParkingLot_D2, np.int32)], True, (0, 0, 255), 2)
 
-            cv2.polylines(frame1, [np.array(ParkingLot_A2, np.int32)], True, (0, 0, 255), 2)
-            resultsA2 = cv2.pointPolygonTest(np.array(ParkingLot_A2, np.int32), ((cx, cy)), False)
-            if resultsA2>=0:
-                if id == ParkingLot['A2']["carId"]:
-                    ParkingLot['A2']["duration"] = (datetime.now() - ParkingLot['A2']["firstDetected"]).seconds
-                    if ParkingLot['A2']["duration"] > 30:
-                        ParkingLot['A2']["parked"] = "yes"
-                        car_dict[id]["status"] = "parked"
-                    else:
-                        ParkingLot['A2']["parked"] = "no"
-                        car_dict[id]["status"] = "moving"
-                else:
-                    ParkingLot['A2'] = {"carId": id,"firstDetected": datetime.now(), "duration": "unknown", "parked": "no"}
-                    car_dict[id]["status"] = "moving"
 
-            cv2.polylines(frame1, [np.array(ParkingLot_A3, np.int32)], True, (0, 0, 255), 2)
-            resultsA3 = cv2.pointPolygonTest(np.array(ParkingLot_A3, np.int32), ((cx, cy)), False)
-            if resultsA3>=0:
-                if id == ParkingLot['A3']["carId"]:
-                    ParkingLot['A3']["duration"] = (datetime.now() - ParkingLot['A3']["firstDetected"]).seconds
-                    if ParkingLot['A3']["duration"] > 30:
-                        ParkingLot['A3']["parked"] = "yes"
-                        car_dict[id]["status"] = "parked"
-                    else:
-                        ParkingLot['A3']["parked"] = "no"
-                        car_dict[id]["status"] = "moving"
-                else:
-                    ParkingLot['A3'] = {"carId": id,"firstDetected": datetime.now(), "duration": "unknown", "parked": "no"}
-                    car_dict[id]["status"] = "moving"
+            cv2.polylines(frame1, [np.array(ParkingLot_D3, np.int32)], True, (0, 0, 255), 2)
+
+            cv2.polylines(frame1, [np.array(ParkingLot_B1, np.int32)], True, (0, 0, 255), 2)
+            cv2.polylines(frame1, [np.array(ParkingLot_B2, np.int32)], True, (0, 0, 255), 2)
 
         # Read a frame from the video
         success2, frame2 = cap2.read()
@@ -497,6 +466,7 @@ while cap1.isOpened() and cap2.isOpened() and cap3.isOpened():
 
         #print(car_dict)
         print(ParkingLot)
+        print(car_dict)
         # Bottom Lane
         #print("1:", car_temp)  # Right Cam Exit
         #print("2:", car_temp2)  # middle Cam Entry

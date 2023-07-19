@@ -21,7 +21,9 @@ classNames = ["person", "bicycle", "car", "motorbike", "aeroplane", "bus", "trai
               ]
 
 #Store Car Dictionary
-copy_car_dict = {"carPlate": "unknown" ,"bbox": "unknown", "entryTime": "unknown", "exitTime": "unknown", "status": "moving", "currentLocation": "unknown"}
+copy_car_dict = {"carPlate": "unknown" ,"bbox": "unknown", "entryTime": "unknown",
+                 "exitTime": "unknown", "status": "moving", "currentLocation": "unknown",
+                 "parkingLot": "unknown", "parkingDetected": "unknown", "duration": "unknown"}
 car_dict = {}
 
 #Temporary Car Dictionary
@@ -36,21 +38,19 @@ car_temp8 = {} #Left Cam Middle Entry Line
 
 
 # Open the video file 1
-video_path1 = "../VideoFootage/rightCamMiddleCar.mp4"
+video_path1 = "../VideoFootage/rightCam3.mp4"
 cap1 = cv2.VideoCapture(video_path1)
 mask1 = cv2.imread("maskRightCamera.png")
 
 # Open the video file 2
-video_path2 = "../VideoFootage/midCamMiddleCar.mp4"
+video_path2 = "../VideoFootage/midCam3.mp4"
 cap2 = cv2.VideoCapture(video_path2)
 mask2 = cv2.imread("maskMiddleCamera.png")
 
 # Open the video file 3
-video_path3 = "../VideoFootage/leftCamMiddleCar.mp4"
+video_path3 = "../VideoFootage/leftCam3.mp4"
 cap3 = cv2.VideoCapture(video_path3)
 mask3 = cv2.imread("maskLeftCamera3.png")
-
-
 
 # Load the YOLO v8 pre-trained model
 modelm = YOLO('../Models/yolov8m.pt')
@@ -86,7 +86,7 @@ LeftCamBottomExitLine = [300, 400, 550, 340]
 #Store each Park Lot Information
 #A1- A20, B1- B20, C1- C15, D1- D19
 ParkingLot = {}
-ParkingLot_empty = {"carId": "unknown","firstDetected": "unknown", "duration": "unknown", "parked": "no"}
+ParkingLot_empty = {"carId": "unknown", "parked": "no"}
 for i in range(20):
     i += 1
     ParkingLot['A'+ str(i)] = ParkingLot_empty.copy()
@@ -101,6 +101,9 @@ for i in range(19):
     ParkingLot['D'+ str(i)] = ParkingLot_empty.copy()
 
 #Store Location for each Parking Lot
-ParkingLot_A1 = [(837,205),(795,216),(746,186),(787,172)]
-ParkingLot_A2 = [(769,209),(725,217),(690,186),(727,180)]
-ParkingLot_A3 = [(697,230),(651,233),(610,215),(659,193)]
+ParkingLot_B1 = [(1316,261),(1292,281),(1228,251),(1248,224)]
+ParkingLot_B2 = [(1277,295),(1243,297),(1163,256),(1198,241)]
+
+ParkingLot_D1 = [(837,205),(795,216),(746,186),(787,172)]
+ParkingLot_D2 = [(769,209),(725,217),(690,186),(727,180)]
+ParkingLot_D3 = [(697,230),(651,233),(610,215),(659,193)]
