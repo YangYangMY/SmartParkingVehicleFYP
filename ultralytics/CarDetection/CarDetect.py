@@ -336,6 +336,8 @@ while cap1.isOpened() and cap2.isOpened() and cap3.isOpened():
             cv2.polylines(frame2, [np.array(ParkingLot_C3, np.int32)], True, (0, 0, 255), 2)
             cv2.polylines(frame2, [np.array(ParkingLot_C4, np.int32)], True, (0, 0, 255), 2)
             cv2.polylines(frame2, [np.array(ParkingLot_C5, np.int32)], True, (0, 0, 255), 2)
+            cv2.polylines(frame2, [np.array(ParkingLot_C6, np.int32)], True, (0, 0, 255), 2)
+            cv2.polylines(frame2, [np.array(ParkingLot_C7, np.int32)], True, (0, 0, 255), 2)
 
             cv2.polylines(frame2, [np.array(ParkingLot_D3, np.int32)], True, (0, 0, 255), 2)
             cv2.polylines(frame2, [np.array(ParkingLot_D4, np.int32)], True, (0, 0, 255), 2)
