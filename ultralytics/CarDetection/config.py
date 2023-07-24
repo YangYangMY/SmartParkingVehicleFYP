@@ -38,17 +38,17 @@ car_temp8 = {} #Left Cam Middle Entry Line
 
 
 # Open the video file 1
-video_path1 = "../VideoFootage/rightCam3.mp4"
+video_path1 = "../VideoFootage/rightCamMiddleCar.mp4"
 cap1 = cv2.VideoCapture(video_path1)
-mask1 = cv2.imread("maskRightCamera.png")
+mask1 = cv2.imread("maskRightCamera1.png")
 
 # Open the video file 2
-video_path2 = "../VideoFootage/midCam3.mp4"
+video_path2 = "../VideoFootage/midCamMiddleCar.mp4"
 cap2 = cv2.VideoCapture(video_path2)
 mask2 = cv2.imread("maskMiddleCamera.png")
 
 # Open the video file 3
-video_path3 = "../VideoFootage/leftCam3.mp4"
+video_path3 = "../VideoFootage/leftCamMiddleCar.mp4"
 cap3 = cv2.VideoCapture(video_path3)
 mask3 = cv2.imread("maskLeftCamera3.png")
 
@@ -100,10 +100,40 @@ for i in range(19):
     i += 1
     ParkingLot['D'+ str(i)] = ParkingLot_empty.copy()
 
-#Store Location for each Parking Lot
-ParkingLot_B1 = [(1316,261),(1292,281),(1228,251),(1248,224)]
-ParkingLot_B2 = [(1277,295),(1243,297),(1163,256),(1198,241)]
+#Store Location for each Parking Lot for Right Camera
+ParkingLot_A1 = [(1814,354),(1693,337),(1715,307),(1837,323)]
+
+ParkingLot_B1 = [(1316,261),(1292,281),(1214,232),(1248,224)]
+ParkingLot_B2 = [(1264,283),(1243,297),(1142,255),(1198,241)]
+ParkingLot_B3 = [(1203,304),(1166,316),(1083,276),(1105,250)]
+ParkingLot_B4 = [(1164,339),(1118,353),(1030,307),(1059,286)]
+ParkingLot_B5 = [(1080,346),(1041,379),(943,317),(974,286)]
+ParkingLot_B6 = [(988,385),(928,401),(817,360),(870,304)]
+ParkingLot_B7 = [(895,426),(821,444),(707,389),(761,313)]
 
 ParkingLot_D1 = [(837,205),(795,216),(746,186),(787,172)]
 ParkingLot_D2 = [(769,209),(725,217),(690,186),(727,180)]
-ParkingLot_D3 = [(697,230),(651,233),(610,215),(659,193)]
+
+#Store Location for each Parking Lot for Middle Camera
+
+ParkingLot_C1 = [(1827,280),(1774,275),(1742,230),(1816,233)]
+ParkingLot_C2 = [(1705,273),(1635,274),(1614,231),(1675,225)]
+ParkingLot_C3 = [(1564,274),(1502,274),(1484,235),(1533,227)]
+ParkingLot_C4 = [(1401,273),(1327,273),(1312,237),(1375,227)]
+ParkingLot_C4 = [(1229,271),(1167,271),(1150,231),(1216,227)]
+ParkingLot_C5 = [(1091,271),(1008,269),(1012,230),(1076,227)]
+
+ParkingLot_D3 = [(1757,160),(1702,161),(1682,127),(1738,127)]
+ParkingLot_D4 = [(1655,164),(1598,164),(1571,127),(1630,127)]
+ParkingLot_D5 = [(1545,161),(1498,166),(1482,127),(1537,127)]
+ParkingLot_D6 = [(1444,164),(1392,159),(1380,115),(1427,117)]
+ParkingLot_D7 = [(1363,157),(1309,154),(1300,115),(1345,117)]
+ParkingLot_D8 = [(1263,159),(1203,156),(1205,120),(1249,123)]
+ParkingLot_D9 = [(1152,161),(1101,158),(1092,121),(1143,121)]
+ParkingLot_D10 = [(1045,162),(1001,164),(991,121),(1037,121)]
+ParkingLot_D11 = [(933,161),(880,158),(883,108),(941,110)]
+ParkingLot_D12 = [(843,157),(777,160),(785,107),(848,109)]
+ParkingLot_D13 = [(726,152),(665,152),(675,107),(727,111)]
+ParkingLot_D14 = [(604,160),(557,154),(564,110),(607,113)]
+ParkingLot_D15 = [(519,165),(477,164),(480,110),(528,113)]
+ParkingLot_D16 = [(418,165),(376,164),(380,110),(427,113)]
