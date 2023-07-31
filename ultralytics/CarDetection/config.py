@@ -38,17 +38,17 @@ car_temp8 = {} #Left Cam Middle Entry Line
 
 
 # Open the video file 1
-video_path1 = "../VideoFootage/rightCamMiddleCar.mp4"
+video_path1 = "../VideoFootage/rightCam3.mp4"
 cap1 = cv2.VideoCapture(video_path1)
 mask1 = cv2.imread("maskRightCamera1.png")
 
 # Open the video file 2
-video_path2 = "../VideoFootage/midCamMiddleCar.mp4"
+video_path2 = "../VideoFootage/midCam3.mp4"
 cap2 = cv2.VideoCapture(video_path2)
 mask2 = cv2.imread("maskMiddleCamera.png")
 
 # Open the video file 3
-video_path3 = "../VideoFootage/leftCamMiddleCar.mp4"
+video_path3 = "../VideoFootage/leftCam3.mp4"
 cap3 = cv2.VideoCapture(video_path3)
 mask3 = cv2.imread("maskLeftCamera3.png")
 
@@ -115,6 +115,7 @@ ParkingLot_D1 = [(837,205),(795,216),(746,186),(787,172)]
 ParkingLot_D2 = [(769,209),(725,217),(690,186),(727,180)]
 
 #Store Location for each Parking Lot for Middle Camera
+ParkingLot_B8 = [(1755,464),(1658,465),(1611,342),(1715,357)]
 
 ParkingLot_C1 = [(1827,280),(1774,275),(1742,230),(1816,233)]
 ParkingLot_C2 = [(1705,273),(1635,274),(1614,231),(1675,225)]
@@ -123,6 +124,10 @@ ParkingLot_C4 = [(1401,273),(1327,273),(1312,237),(1375,227)]
 ParkingLot_C5 = [(1229,271),(1167,271),(1150,231),(1216,227)]
 ParkingLot_C6 = [(1091,271),(1008,269),(1012,230),(1076,227)]
 ParkingLot_C7 = [(934,284),(864,284),(861,239),(937,233)]
+ParkingLot_C8 = [(778,276),(704,276),(713,235),(776,235)]
+ParkingLot_C9 = [(631,276),(565,276),(580,235),(632,235)]
+ParkingLot_C10 = [(458,276),(402,276),(410,230),(472,230)]
+ParkingLot_C11 = [(297,276),(232,276),(241,234),(306,234)]
 
 ParkingLot_D3 = [(1757,160),(1702,161),(1682,127),(1738,127)]
 ParkingLot_D4 = [(1655,164),(1598,164),(1571,127),(1630,127)]

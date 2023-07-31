@@ -331,6 +331,8 @@ while cap1.isOpened() and cap2.isOpened() and cap3.isOpened():
                         car_temp5[id]["bbox"] = (x1, y1, x2, y2)
                         car_temp5[id]["currentLocation"] = "MiddleCam"
 
+            cv2.polylines(frame2, [np.array(ParkingLot_B8, np.int32)], True, (0, 0, 255), 2)
+
             cv2.polylines(frame2, [np.array(ParkingLot_C1, np.int32)], True, (0, 0, 255), 2)
             cv2.polylines(frame2, [np.array(ParkingLot_C2, np.int32)], True, (0, 0, 255), 2)
             cv2.polylines(frame2, [np.array(ParkingLot_C3, np.int32)], True, (0, 0, 255), 2)
@@ -338,6 +340,10 @@ while cap1.isOpened() and cap2.isOpened() and cap3.isOpened():
             cv2.polylines(frame2, [np.array(ParkingLot_C5, np.int32)], True, (0, 0, 255), 2)
             cv2.polylines(frame2, [np.array(ParkingLot_C6, np.int32)], True, (0, 0, 255), 2)
             cv2.polylines(frame2, [np.array(ParkingLot_C7, np.int32)], True, (0, 0, 255), 2)
+            cv2.polylines(frame2, [np.array(ParkingLot_C8, np.int32)], True, (0, 0, 255), 2)
+            cv2.polylines(frame2, [np.array(ParkingLot_C9, np.int32)], True, (0, 0, 255), 2)
+            cv2.polylines(frame2, [np.array(ParkingLot_C10, np.int32)], True, (0, 0, 255), 2)
+            cv2.polylines(frame2, [np.array(ParkingLot_C11, np.int32)], True, (0, 0, 255), 2)
 
             cv2.polylines(frame2, [np.array(ParkingLot_D3, np.int32)], True, (0, 0, 255), 2)
             cv2.polylines(frame2, [np.array(ParkingLot_D4, np.int32)], True, (0, 0, 255), 2)
