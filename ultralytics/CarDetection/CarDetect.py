@@ -46,7 +46,6 @@ while cap1.isOpened() and cap2.isOpened() and cap3.isOpened():
         imgRegion1 = cv2.bitwise_and(frame1, mask1)
         # Run YOLOv8 inference on the frame
         results = modelm(imgRegion1, stream=True)
-
         detections = np.empty((0,5))
 
         # Visualize the results on the frame
@@ -56,14 +55,12 @@ while cap1.isOpened() and cap2.isOpened() and cap3.isOpened():
                 # Bounding Box
                 x1, y1, x2, y2 = box.xyxy[0]
                 x1, y1, x2, y2 = int(x1), int(y1), int(x2), int(y2)
-
                 w, h = x2 - x1, y2 - y1
 
                 # Confidence
                 conf = math.ceil((box.conf[0] * 100)) / 100
                 # Class Name
                 cls = int(box.cls[0])
-
                 currentClass = classNames[cls]
 
                 if currentClass == "car" and conf > 0.3:
@@ -171,11 +168,9 @@ while cap1.isOpened() and cap2.isOpened() and cap3.isOpened():
 
             cv2.polylines(frame1, [np.array(ParkingLot_D2, np.int32)], True, (0, 0, 255), 2)
 
-            cv2.polylines(frame1, [np.array(ParkingLot_A1, np.int32)], True, (0, 0, 255), 2)
-            resultsA1=cv2.pointPolygonTest(np.array(ParkingLot_A1,np.int32),((cx,cy)),False)
-            if resultsA1>=0:
-               cv2.rectangle(frame1,(x1,y1),(x2,y2),(0,255,0),2)
-               cv2.circle(frame1,(cx,cy),3,(0,0,255),-1)
+            cv2.polylines(frame1, [np.array(ParkingLot_A7, np.int32)], True, (0, 0, 255), 2)
+            cv2.polylines(frame1, [np.array(ParkingLot_A8, np.int32)], True, (0, 0, 255), 2)
+            cv2.polylines(frame1, [np.array(ParkingLot_A9, np.int32)], True, (0, 0, 255), 2)
 
             cv2.polylines(frame1, [np.array(ParkingLot_B1, np.int32)], True, (0, 0, 255), 2)
             cv2.polylines(frame1, [np.array(ParkingLot_B2, np.int32)], True, (0, 0, 255), 2)
@@ -332,6 +327,13 @@ while cap1.isOpened() and cap2.isOpened() and cap3.isOpened():
                         car_temp5[id]["currentLocation"] = "MiddleCam"
 
             cv2.polylines(frame2, [np.array(ParkingLot_B8, np.int32)], True, (0, 0, 255), 2)
+            cv2.polylines(frame2, [np.array(ParkingLot_B9, np.int32)], True, (0, 0, 255), 2)
+            cv2.polylines(frame2, [np.array(ParkingLot_B10, np.int32)], True, (0, 0, 255), 2)
+            cv2.polylines(frame2, [np.array(ParkingLot_B11, np.int32)], True, (0, 0, 255), 2)
+            cv2.polylines(frame2, [np.array(ParkingLot_B12, np.int32)], True, (0, 0, 255), 2)
+            cv2.polylines(frame2, [np.array(ParkingLot_B13, np.int32)], True, (0, 0, 255), 2)
+            cv2.polylines(frame2, [np.array(ParkingLot_B14, np.int32)], True, (0, 0, 255), 2)
+            cv2.polylines(frame2, [np.array(ParkingLot_B15, np.int32)], True, (0, 0, 255), 2)
 
             cv2.polylines(frame2, [np.array(ParkingLot_C1, np.int32)], True, (0, 0, 255), 2)
             cv2.polylines(frame2, [np.array(ParkingLot_C2, np.int32)], True, (0, 0, 255), 2)
@@ -541,6 +543,7 @@ while cap1.isOpened() and cap2.isOpened() and cap3.isOpened():
 
         # Display the combined frame
         #cv2.imshow("Combined Videos", combined_frame)
+        cv2.imshow("temp2", frame1)
         cv2.imshow("temp1", frame2)
         #cv2.imshow("Combined Videos 2", resized_frame3)
         #cv2.setMouseCallback('Combined Videos 2', RGB)

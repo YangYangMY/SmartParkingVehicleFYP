@@ -101,7 +101,9 @@ for i in range(19):
     ParkingLot['D'+ str(i)] = ParkingLot_empty.copy()
 
 #Store Location for each Parking Lot for Right Camera
-ParkingLot_A1 = [(1814,354),(1693,337),(1715,307),(1837,323)]
+ParkingLot_A7 = [(1568,664),(1519,735),(1227,594),(1276,556)]
+ParkingLot_A8 = [(1507,789),(1410,870),(1111,705),(1190,639)]
+ParkingLot_A9 = [(1351,903),(1204,1000),(898,807),(1013,720)]
 
 ParkingLot_B1 = [(1316,261),(1292,281),(1214,232),(1248,224)]
 ParkingLot_B2 = [(1264,283),(1243,297),(1142,255),(1198,241)]
@@ -115,7 +117,15 @@ ParkingLot_D1 = [(837,205),(795,216),(746,186),(787,172)]
 ParkingLot_D2 = [(769,209),(725,217),(690,186),(727,180)]
 
 #Store Location for each Parking Lot for Middle Camera
-ParkingLot_B8 = [(1755,464),(1658,465),(1611,342),(1715,357)]
+coordMid = [490, 360]
+ParkingLot_B8 = [(1808,coordMid[0]),(1658,coordMid[0]),(1524,coordMid[1]),(1655,coordMid[1])]
+ParkingLot_B9 = [(1612,coordMid[0]),(1444,coordMid[0]),(1358,coordMid[1]),(1491,coordMid[1])]
+ParkingLot_B10 = [(1401,coordMid[0]),(1240,coordMid[0]),(1178,coordMid[1]),(1299,coordMid[1])]
+ParkingLot_B11 = [(1166,coordMid[0]),(993,coordMid[0]),(986,coordMid[1]),(1134,coordMid[1])]
+ParkingLot_B12 = [(962,coordMid[0]),(778,coordMid[0]),(810,coordMid[1]),(957,coordMid[1])]
+ParkingLot_B13 = [(738,coordMid[0]),(570,coordMid[0]),(642,coordMid[1]),(757,coordMid[1])]
+ParkingLot_B14 = [(515,coordMid[0]),(351,coordMid[0]),(456,coordMid[1]),(583,coordMid[1])]
+ParkingLot_B15 = [(287,coordMid[0]),(183,coordMid[0]),(292,coordMid[1]),(402,coordMid[1])]
 
 ParkingLot_C1 = [(1827,280),(1774,275),(1742,230),(1816,233)]
 ParkingLot_C2 = [(1705,273),(1635,274),(1614,231),(1675,225)]
@@ -125,7 +135,7 @@ ParkingLot_C5 = [(1229,271),(1167,271),(1150,231),(1216,227)]
 ParkingLot_C6 = [(1091,271),(1008,269),(1012,230),(1076,227)]
 ParkingLot_C7 = [(934,284),(864,284),(861,239),(937,233)]
 ParkingLot_C8 = [(778,276),(704,276),(713,235),(776,235)]
-ParkingLot_C9 = [(631,276),(565,276),(580,235),(632,235)]
+ParkingLot_C9 = [(632,287),(558,283),(580,235),(647,240)]
 ParkingLot_C10 = [(458,276),(402,276),(410,230),(472,230)]
 ParkingLot_C11 = [(297,276),(232,276),(241,234),(306,234)]
 
