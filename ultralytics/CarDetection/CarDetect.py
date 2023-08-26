@@ -80,8 +80,8 @@ while cap1.isOpened() and cap2.isOpened() and cap3.isOpened():
             w, h = x2 - x1, y2 - y1
             cx, cy = x1 + w // 2, y1 + h // 2
 
-            cvzone.putTextRect(frame1, f' {int(id)}', (max(0, x1), max(35, y1)),
-                               scale=2, thickness=3, offset=10)
+            #cvzone.putTextRect(frame1, f' {int(id)}', (max(0, x1), max(35, y1)),
+                               #scale=2, thickness=3, offset=10)
             cv2.circle(frame1, (cx, cy), 5, (255, 0, 255), cv2.FILLED)
 
 
@@ -537,8 +537,7 @@ while cap1.isOpened() and cap2.isOpened() and cap3.isOpened():
         yolo_fps2 = 1 / (end - start2)
         yolo_fps3 = 1 / (end - start3)
         # Display the frame rate on the left top of the screen
-       # cv2.putText(resized_frame1, "FPS: " + "{:.2f}".format(yolo_fps1), (20, 30), cv2.FONT_HERSHEY_SIMPLEX, 0.8,
-       #             (0, 0, 255), 2)
+       # cv2.putText(resized_frame1, "FPS: " + "{:.2f}".format(yolo_fps1), (20, 30), cv2.FONT_HERSHEY_SIMPLEX, 0.8,(0, 0, 255), 2)
        # cv2.putText(resized_frame2, "FPS: " + "{:.2f}".format(yolo_fps2), (20, 30), cv2.FONT_HERSHEY_SIMPLEX, 0.8, (0, 0, 255), 2)
        # cv2.putText(resized_frame3, "FPS: " + "{:.2f}".format(yolo_fps3), (20, 30), cv2.FONT_HERSHEY_SIMPLEX, 0.8,
          #           (0, 0, 255), 2)
@@ -547,7 +546,7 @@ while cap1.isOpened() and cap2.isOpened() and cap3.isOpened():
         #combined_frame = cv2.hconcat([resized_frame2, resized_frame1])
 
         # Display the combined frame
-        #cv2.imshow("Video 1", resized_frame1)
+        #cv2.imshow("temp1", resized_frame1)
         #cv2.imshow("Video 2", resized_frame2)
         #cv2.imshow("Video 3", resized_frame3)
 
