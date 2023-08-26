@@ -230,8 +230,8 @@ while cap1.isOpened() and cap2.isOpened() and cap3.isOpened():
                 x1, y1, x2, y2, id = results
                 x1, y1, x2, y2 = int(x1), int(y1), int(x2), int(y2)
                 w, h = x2 - x1, y2 - y1
-                #cvzone.putTextRect(frame2, f' {int(id)}', (max(0, x1), max(35, y1)),
-                        #             scale=2, thickness=3, offset=10)
+                cvzone.putTextRect(frame2, f' {int(id)}', (max(0, x1), max(35, y1)),
+                                     scale=2, thickness=3, offset=10)
 
                 cx, cy = x1 + w // 2, y1 + h // 2
                 cv2.circle(frame2, (cx, cy), 5, (255, 0, 255), cv2.FILLED)
@@ -503,6 +503,11 @@ while cap1.isOpened() and cap2.isOpened() and cap3.isOpened():
                     if id in car_dict:
                         car_dict[id]["exitTime"] = datetime.now().strftime("%d-%m-%Y %H:%M:%S")
 
+                cv2.polylines(frame3, [np.array(ParkingLot_C11A, np.int32)], True, (0, 0, 255), 2)
+                cv2.polylines(frame3, [np.array(ParkingLot_C12, np.int32)], True, (0, 0, 255), 2)
+
+                cv2.polylines(frame3, [np.array(ParkingLot_B16, np.int32)], True, (0, 0, 255), 2)
+
         #print(car_dict)
         print(ParkingLot)
         print(car_dict)
@@ -519,12 +524,12 @@ while cap1.isOpened() and cap2.isOpened() and cap3.isOpened():
         #print("8:", car_temp8)  # Left Cam Entry
 
         # Resize the annotated frame to a maximum width and height of 600 pixels
-        resized_frame1 = cv2.resize(frame1, (1000, 800))
-        resized_frame2 = cv2.resize(frame2, (800, 600))
-        resized_frame3 = cv2.resize(frame3, (800, 600))
+        #resized_frame1 = cv2.resize(frame1, (800, 600))
+        #resized_frame2 = cv2.resize(frame2, (800, 600))
+        #resized_frame3 = cv2.resize(frame3, (800, 600))
 
         # Display the frame rate on the left top of the screen
-        cv2.putText(resized_frame1, f' Count: {len(totalCount)}', (50, 70), cv2.FONT_HERSHEY_SIMPLEX, 0.8, (0, 0, 255), 2)
+        #cv2.putText(resized_frame1, f' Count: {len(totalCount)}', (50, 70), cv2.FONT_HERSHEY_SIMPLEX, 0.8, (0, 0, 255), 2)
 
         # Stop the timer and calculate the FPS
         end = timeit.default_timer()
@@ -532,21 +537,29 @@ while cap1.isOpened() and cap2.isOpened() and cap3.isOpened():
         yolo_fps2 = 1 / (end - start2)
         yolo_fps3 = 1 / (end - start3)
         # Display the frame rate on the left top of the screen
-        cv2.putText(resized_frame1, "FPS: " + "{:.2f}".format(yolo_fps1), (20, 30), cv2.FONT_HERSHEY_SIMPLEX, 0.8,
-                    (0, 0, 255), 2)
-        cv2.putText(resized_frame2, "FPS: " + "{:.2f}".format(yolo_fps2), (20, 30), cv2.FONT_HERSHEY_SIMPLEX, 0.8, (0, 0, 255), 2)
-        cv2.putText(resized_frame3, "FPS: " + "{:.2f}".format(yolo_fps3), (20, 30), cv2.FONT_HERSHEY_SIMPLEX, 0.8,
-                    (0, 0, 255), 2)
+       # cv2.putText(resized_frame1, "FPS: " + "{:.2f}".format(yolo_fps1), (20, 30), cv2.FONT_HERSHEY_SIMPLEX, 0.8,
+       #             (0, 0, 255), 2)
+       # cv2.putText(resized_frame2, "FPS: " + "{:.2f}".format(yolo_fps2), (20, 30), cv2.FONT_HERSHEY_SIMPLEX, 0.8, (0, 0, 255), 2)
+       # cv2.putText(resized_frame3, "FPS: " + "{:.2f}".format(yolo_fps3), (20, 30), cv2.FONT_HERSHEY_SIMPLEX, 0.8,
+         #           (0, 0, 255), 2)
 
         # Combine the frames side by side
         #combined_frame = cv2.hconcat([resized_frame2, resized_frame1])
 
         # Display the combined frame
-        #cv2.imshow("Combined Videos", combined_frame)
-        cv2.imshow("temp2", frame1)
-        cv2.imshow("temp1", frame2)
-        #cv2.imshow("Combined Videos 2", resized_frame3)
-        #cv2.setMouseCallback('Combined Videos 2', RGB)
+        #cv2.imshow("Video 1", resized_frame1)
+        #cv2.imshow("Video 2", resized_frame2)
+        #cv2.imshow("Video 3", resized_frame3)
+
+        #Display Combine frame
+        #cv2.imshow("Combined Video", combined_frame)
+        #cv2.imshow("Video 3", resized_frame3)
+
+        #Display frame for coordinate
+        cv2.imshow("temp1", frame1)
+        #cv2.imshow("temp2", frame2)
+        #cv2.imshow("temp3", frame3)
+
         cv2.setMouseCallback('temp1', RGB)
 
         # Break the loop if 'q' is pressed
