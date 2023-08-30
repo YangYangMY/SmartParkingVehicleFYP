@@ -23,15 +23,10 @@ def RGB(event, x, y, flags, param):
         colorsBGR = [x, y]
         print(colorsBGR)
 
-
-
-
 # Check if video files were opened successfully
 if not cap1.isOpened() or not cap2.isOpened() or not cap3.isOpened():
     print("Error opening video files")
     exit()
-
-
 
 # Loop through the video frames
 while cap1.isOpened() and cap2.isOpened() and cap3.isOpened():
@@ -45,7 +40,7 @@ while cap1.isOpened() and cap2.isOpened() and cap3.isOpened():
 
         imgRegion1 = cv2.bitwise_and(frame1, mask1)
         # Run YOLOv8 inference on the frame
-        results = modelm(imgRegion1, stream=True)
+        results = modelm(imgRegion1, stream=True, verbose=False)
         detections = np.empty((0,5))
 
         # Visualize the results on the frame
@@ -190,7 +185,7 @@ while cap1.isOpened() and cap2.isOpened() and cap3.isOpened():
 
             imgRegion2 = cv2.bitwise_and(frame2, mask2)
             # Run YOLOv8 inference on the frame
-            results = modelx(imgRegion2, stream=True)
+            results = modelx(imgRegion2, stream=True, verbose=False)
 
             detections2 = np.empty((0, 5))
 
@@ -371,7 +366,7 @@ while cap1.isOpened() and cap2.isOpened() and cap3.isOpened():
 
             imgRegion3 = cv2.bitwise_and(frame3, mask3)
             # Run YOLOv8 inference on the frame
-            results = modelm(imgRegion3, stream=True)
+            results = modelm(imgRegion3, stream=True, verbose=False)
 
             detections3 = np.empty((0, 5))
 
@@ -503,10 +498,17 @@ while cap1.isOpened() and cap2.isOpened() and cap3.isOpened():
                     if id in car_dict:
                         car_dict[id]["exitTime"] = datetime.now().strftime("%d-%m-%Y %H:%M:%S")
 
+                cv2.polylines(frame3, [np.array(ParkingLot_B16, np.int32)], True, (0, 0, 255), 2)
+                cv2.polylines(frame3, [np.array(ParkingLot_B17, np.int32)], True, (0, 0, 255), 2)
+                cv2.polylines(frame3, [np.array(ParkingLot_B18, np.int32)], True, (0, 0, 255), 2)
+
                 cv2.polylines(frame3, [np.array(ParkingLot_C11A, np.int32)], True, (0, 0, 255), 2)
                 cv2.polylines(frame3, [np.array(ParkingLot_C12, np.int32)], True, (0, 0, 255), 2)
+                cv2.polylines(frame3, [np.array(ParkingLot_C13, np.int32)], True, (0, 0, 255), 2)
+                cv2.polylines(frame3, [np.array(ParkingLot_C14, np.int32)], True, (0, 0, 255), 2)
+                cv2.polylines(frame3, [np.array(ParkingLot_C15, np.int32)], True, (0, 0, 255), 2)
 
-                cv2.polylines(frame3, [np.array(ParkingLot_B16, np.int32)], True, (0, 0, 255), 2)
+
 
         #print(car_dict)
         print(ParkingLot)
@@ -536,8 +538,9 @@ while cap1.isOpened() and cap2.isOpened() and cap3.isOpened():
         yolo_fps1 = 1 / (end - start1)
         yolo_fps2 = 1 / (end - start2)
         yolo_fps3 = 1 / (end - start3)
+
         # Display the frame rate on the left top of the screen
-       # cv2.putText(resized_frame1, "FPS: " + "{:.2f}".format(yolo_fps1), (20, 30), cv2.FONT_HERSHEY_SIMPLEX, 0.8,(0, 0, 255), 2)
+        # cv2.putText(resized_frame1, "FPS: " + "{:.2f}".format(yolo_fps1), (20, 30), cv2.FONT_HERSHEY_SIMPLEX, 0.8,(0, 0, 255), 2)
        # cv2.putText(resized_frame2, "FPS: " + "{:.2f}".format(yolo_fps2), (20, 30), cv2.FONT_HERSHEY_SIMPLEX, 0.8, (0, 0, 255), 2)
        # cv2.putText(resized_frame3, "FPS: " + "{:.2f}".format(yolo_fps3), (20, 30), cv2.FONT_HERSHEY_SIMPLEX, 0.8,
          #           (0, 0, 255), 2)
@@ -555,9 +558,9 @@ while cap1.isOpened() and cap2.isOpened() and cap3.isOpened():
         #cv2.imshow("Video 3", resized_frame3)
 
         #Display frame for coordinate
-        cv2.imshow("temp1", frame1)
+        #cv2.imshow("temp1", frame1)
         #cv2.imshow("temp2", frame2)
-        #cv2.imshow("temp3", frame3)
+        cv2.imshow("temp1", frame3)
 
         cv2.setMouseCallback('temp1', RGB)
 
