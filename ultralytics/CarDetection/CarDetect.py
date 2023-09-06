@@ -1,9 +1,6 @@
 import math
-import cv2
 from ultralytics import YOLO
-import torch
 import timeit
-import cvzone
 from CarDetection.sort import *
 from datetime import datetime
 from config import *
@@ -354,8 +351,6 @@ while cap1.isOpened() and cap2.isOpened() and cap3.isOpened():
             cv2.polylines(frame2, [np.array(ParkingLot_D12, np.int32)], True, (0, 0, 255), 2)
             cv2.polylines(frame2, [np.array(ParkingLot_D13, np.int32)], True, (0, 0, 255), 2)
             cv2.polylines(frame2, [np.array(ParkingLot_D14, np.int32)], True, (0, 0, 255), 2)
-            cv2.polylines(frame2, [np.array(ParkingLot_D15, np.int32)], True, (0, 0, 255), 2)
-            cv2.polylines(frame2, [np.array(ParkingLot_D16, np.int32)], True, (0, 0, 255), 2)
 
             # Read a frame from the video
             success3, frame3 = cap3.read()
@@ -409,8 +404,7 @@ while cap1.isOpened() and cap2.isOpened() and cap3.isOpened():
                 x1, y1, x2, y2, id = results
                 x1, y1, x2, y2 = int(x1), int(y1), int(x2), int(y2)
                 w, h = x2 - x1, y2 - y1
-                cvzone.putTextRect(frame3, f' {int(id)}', (max(0, x1), max(35, y1)),
-                                   scale=2, thickness=3, offset=10)
+                #cvzone.putTextRect(frame3, f' {int(id)}', (max(0, x1), max(35, y1)), scale=2, thickness=3, offset=10)
 
                 cx, cy = x1 + w // 2, y1 + h // 2
                 cv2.circle(frame3, (cx, cy), 5, (255, 0, 255), cv2.FILLED)
@@ -498,21 +492,31 @@ while cap1.isOpened() and cap2.isOpened() and cap3.isOpened():
                     if id in car_dict:
                         car_dict[id]["exitTime"] = datetime.now().strftime("%d-%m-%Y %H:%M:%S")
 
+                cv2.polylines(frame3, [np.array(ParkingLot_A14, np.int32)], True, (0, 0, 255), 2)
+                cv2.polylines(frame3, [np.array(ParkingLot_A15, np.int32)], True, (0, 0, 255), 2)
+                cv2.polylines(frame3, [np.array(ParkingLot_A16, np.int32)], True, (0, 0, 255), 2)
+                cv2.polylines(frame3, [np.array(ParkingLot_A17, np.int32)], True, (0, 0, 255), 2)
+
                 cv2.polylines(frame3, [np.array(ParkingLot_B16, np.int32)], True, (0, 0, 255), 2)
                 cv2.polylines(frame3, [np.array(ParkingLot_B17, np.int32)], True, (0, 0, 255), 2)
                 cv2.polylines(frame3, [np.array(ParkingLot_B18, np.int32)], True, (0, 0, 255), 2)
+                cv2.polylines(frame3, [np.array(ParkingLot_B19, np.int32)], True, (0, 0, 255), 2)
+                cv2.polylines(frame3, [np.array(ParkingLot_B20, np.int32)], True, (0, 0, 255), 2)
 
-                cv2.polylines(frame3, [np.array(ParkingLot_C11A, np.int32)], True, (0, 0, 255), 2)
                 cv2.polylines(frame3, [np.array(ParkingLot_C12, np.int32)], True, (0, 0, 255), 2)
                 cv2.polylines(frame3, [np.array(ParkingLot_C13, np.int32)], True, (0, 0, 255), 2)
                 cv2.polylines(frame3, [np.array(ParkingLot_C14, np.int32)], True, (0, 0, 255), 2)
                 cv2.polylines(frame3, [np.array(ParkingLot_C15, np.int32)], True, (0, 0, 255), 2)
 
+                cv2.polylines(frame3, [np.array(ParkingLot_D15, np.int32)], True, (0, 0, 255), 2)
+                cv2.polylines(frame3, [np.array(ParkingLot_D16, np.int32)], True, (0, 0, 255), 2)
+                cv2.polylines(frame3, [np.array(ParkingLot_D17, np.int32)], True, (0, 0, 255), 2)
+                cv2.polylines(frame3, [np.array(ParkingLot_D18, np.int32)], True, (0, 0, 255), 2)
+                cv2.polylines(frame3, [np.array(ParkingLot_D19, np.int32)], True, (0, 0, 255), 2)
 
-
-        #print(car_dict)
-        print(ParkingLot)
         print(car_dict)
+        print(ParkingLot)
+        #print(car_dict)
         # Bottom Lane
         #print("1:", car_temp)  # Right Cam Exit
         #print("2:", car_temp2)  # middle Cam Entry
@@ -526,9 +530,9 @@ while cap1.isOpened() and cap2.isOpened() and cap3.isOpened():
         #print("8:", car_temp8)  # Left Cam Entry
 
         # Resize the annotated frame to a maximum width and height of 600 pixels
-        #resized_frame1 = cv2.resize(frame1, (800, 600))
-        #resized_frame2 = cv2.resize(frame2, (800, 600))
-        #resized_frame3 = cv2.resize(frame3, (800, 600))
+        resized_frame1 = cv2.resize(frame1, (800, 600))
+        resized_frame2 = cv2.resize(frame2, (800, 600))
+        resized_frame3 = cv2.resize(frame3, (800, 600))
 
         # Display the frame rate on the left top of the screen
         #cv2.putText(resized_frame1, f' Count: {len(totalCount)}', (50, 70), cv2.FONT_HERSHEY_SIMPLEX, 0.8, (0, 0, 255), 2)
@@ -546,7 +550,7 @@ while cap1.isOpened() and cap2.isOpened() and cap3.isOpened():
          #           (0, 0, 255), 2)
 
         # Combine the frames side by side
-        #combined_frame = cv2.hconcat([resized_frame2, resized_frame1])
+        combined_frame = cv2.hconcat([resized_frame2, resized_frame1])
 
         # Display the combined frame
         #cv2.imshow("temp1", resized_frame1)
@@ -554,15 +558,15 @@ while cap1.isOpened() and cap2.isOpened() and cap3.isOpened():
         #cv2.imshow("Video 3", resized_frame3)
 
         #Display Combine frame
-        #cv2.imshow("Combined Video", combined_frame)
-        #cv2.imshow("Video 3", resized_frame3)
+        cv2.imshow("Combined Video", combined_frame)
+        cv2.imshow("Video 3", resized_frame3)
 
         #Display frame for coordinate
         #cv2.imshow("temp1", frame1)
         #cv2.imshow("temp2", frame2)
-        cv2.imshow("temp1", frame3)
+        #cv2.imshow("temp1", frame3)
 
-        cv2.setMouseCallback('temp1', RGB)
+        #cv2.setMouseCallback('temp1', RGB)
 
         # Break the loop if 'q' is pressed
         if cv2.waitKey(1) & 0xFF == ord("q"):
