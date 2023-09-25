@@ -6,6 +6,10 @@ import numpy as np
 from CarDetection.CarDetectController import PARKING_TIMEOUT
 from CarDetection.config import copy_car_dict
 
+def RGB(event, x, y, flags, param):
+    if event == cv2.EVENT_MOUSEMOVE:
+        colorsBGR = [x, y]
+        print(colorsBGR)
 
 def update_car_info(id, x1, y1, x2, y2, car_dict, current_location):
     if id in car_dict:

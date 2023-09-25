@@ -1,4 +1,5 @@
 from CarDetectController import *
+from CarDetection.CarDetectionAlgorithm import RGB
 from config import *
 
 def ShowVideoOutput(frame1, frame2, frame3, start1, start2, start3):
@@ -41,6 +42,8 @@ def ShowVideoOutput(frame1, frame2, frame3, start1, start2, start3):
             cv2.putText(frame3, "FPS: " + "{:.2f}".format(yolo_fps3), (20, 30), cv2.FONT_HERSHEY_SIMPLEX, 0.8,(0, 0, 255), 2)
 
         #Display frame for coordinate
-        cv2.imshow("temp1", frame2)
+        cv2.imshow("temp1", frame1)
         cv2.imshow("temp2", frame2)
         cv2.imshow("temp3", frame3)
+
+        cv2.setMouseCallback('temp1', RGB)

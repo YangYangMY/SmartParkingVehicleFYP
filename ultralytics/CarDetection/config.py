@@ -36,26 +36,6 @@ car_temp6 = {} #Left Cam Bottom Entry Line
 car_temp7 = {} #Middle Cam Middle Exit Line
 car_temp8 = {} #Left Cam Middle Entry Line
 
-
-# Open the video file 1
-video_path1 = "../VideoFootage/rightCam2.mp4"
-cap1 = cv2.VideoCapture(video_path1)
-mask1 = cv2.imread("MaskImage/maskRightCamera.png")
-
-# Open the video file 2
-video_path2 = "../VideoFootage/midCam2.mp4"
-cap2 = cv2.VideoCapture(video_path2)
-mask2 = cv2.imread("MaskImage/maskMiddleCamera.png")
-
-# Open the video file 3
-video_path3 = "../VideoFootage/leftCam2.mp4"
-cap3 = cv2.VideoCapture(video_path3)
-mask3 = cv2.imread("MaskImage/maskLeftCamera.png")
-
-# Load the YOLO v8 pre-trained model
-modelm = YOLO('../Models/yolov8m.pt')
-modelx = YOLO('../Models/yolov8x.pt')
-
 # Tracking store id for each object
 tracker = Sort(max_age=120, min_hits=5, iou_threshold=0.3) #Store for right Camera
 tracker2 = Sort(max_age=120, min_hits=5, iou_threshold=0.3) #Store for middle Camera

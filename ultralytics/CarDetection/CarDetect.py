@@ -12,12 +12,6 @@ else:
 current_time = datetime.now().strftime("%d-%m-%Y %H:%M:%S")
 print("Current time:", current_time)
 
-
-def RGB(event, x, y, flags, param):
-    if event == cv2.EVENT_MOUSEMOVE:
-        colorsBGR = [x, y]
-        print(colorsBGR)
-
 # Check if video files were opened successfully
 if not cap1.isOpened() or not cap2.isOpened() or not cap3.isOpened():
     print("Error opening video files")
@@ -396,26 +390,8 @@ while cap1.isOpened() and cap2.isOpened() and cap3.isOpened():
                     for parking_lot_name in parking_lots_data_left_cam.keys():
                         process_parking(parking_lots_data_left_cam, car_dict, id, cx, cy, parking_lot_name, parking_lots)
 
-        print(car_dict)
-        #print(parking_lots['B8'])
-        #print(car_dict)
-        # Bottom Lane
-        #print("1:", car_temp)  # Right Cam Exit
-        #print("2:", car_temp2)  # middle Cam Entry
-        #print("5:", car_temp5)  # Middle Cam Exit
-        #print("6:", car_temp6)  # Left Cam Entry
-
-        # Middle Lane
-        #print("3:", car_temp3)  # Right Cam Exit
-        #print("4:", car_temp4)  # Middle Cam Entry
-        #print("7:", car_temp7)  # Middle Cam Exit
-        #print("8:", car_temp8)  # Left Cam Entry
-
-
         #To display Video Output
         ShowVideoOutput(frame1,frame2,frame3, start1, start2, start3)
-
-        #cv2.setMouseCallback('temp1', RGB)
 
         # Break the loop if 'q' is pressed
         if cv2.waitKey(1) & 0xFF == ord("q"):
