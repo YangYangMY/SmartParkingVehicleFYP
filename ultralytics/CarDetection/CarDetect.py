@@ -111,6 +111,7 @@ while cap1.isOpened() and cap2.isOpened() and cap3.isOpened():
                             car_temp3[id]["currentLocation"] = "RightCam"
 
             draw_parking_lot_polylines(frame1, ParkingLotCoordinateRightCam, showParkingLotBox, parking_lots)
+            draw_parking_lot_polylines(frame1, DoubleParkCoordinateRightCam, showParkingLotBox, parking_lots)
 
             for parking_lot_name in parking_lots_data_RightCam.keys():
                 process_parking(ParkingLotCoordinateRightCam, car_dict, id, cx, cy, parking_lot_name, parking_lots)
@@ -389,6 +390,22 @@ while cap1.isOpened() and cap2.isOpened() and cap3.isOpened():
                     # Run Parking Detection Algorithm in Middle Camera
                     for parking_lot_name in parking_lots_data_left_cam.keys():
                         process_parking(parking_lots_data_left_cam, car_dict, id, cx, cy, parking_lot_name, parking_lots)
+
+        # Print Car Dictionary Data
+        print(car_dict)
+        # print(parking_lots['B8'])
+        # print(car_dict)
+        # Bottom Lane
+        # print("1:", car_temp)  # Right Cam Exit
+        # print("2:", car_temp2)  # middle Cam Entry
+        # print("5:", car_temp5)  # Middle Cam Exit
+        # print("6:", car_temp6)  # Left Cam Entry
+
+        # Middle Lane
+        # print("3:", car_temp3)  # Right Cam Exit
+        # print("4:", car_temp4)  # Middle Cam Entry
+        # print("7:", car_temp7)  # Middle Cam Exit
+        # print("8:", car_temp8)  # Left Cam Entry
 
         #To display Video Output
         ShowVideoOutput(frame1,frame2,frame3, start1, start2, start3)

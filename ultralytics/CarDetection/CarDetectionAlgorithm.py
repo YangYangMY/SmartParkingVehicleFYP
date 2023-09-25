@@ -53,6 +53,7 @@ def process_parking(coordinates, car_dict, id, cx, cy, parking_lot_name, parking
     results = cv2.pointPolygonTest(parking_lot_coordinates, (cx, cy), False)
 
     if results >= 0:
+        # Car is inside the parking lot
         car_data = car_dict.get(id, {})
         current_time = datetime.now()
 
@@ -69,10 +70,24 @@ def process_parking(coordinates, car_dict, id, cx, cy, parking_lot_name, parking
                 parking_lots[parking_lot_name]["carId"] = "unknown"
                 parking_lots[parking_lot_name]["parked"] = "no"
         else:
+            # Car entered the parking lot
             car_data["parkingDetected"] = current_time
             car_data["parkingLot"] = parking_lot_name
             parking_lots[parking_lot_name]["carId"] = id
             parking_lots[parking_lot_name]["parked"] = "no"
             car_data["status"] = "moving"
+            car_data["exitTime"] = "unknown"
 
         car_dict[id] = car_data
+
+    else:
+        # Car is no longer inside the parking lot
+        car_data = car_dict.get(id, {})
+        if car_data.get("parkingLot") == parking_lot_name:
+            parking_lots[parking_lot_name]["carId"] = "unknown"
+            parking_lots[parking_lot_name]["parked"] = "no"
+            car_data["parkingDetected"] = "unknown"
+            car_data["parkingLot"] = "unknown"
+            car_data["status"] = "moving"
+            car_data["duration"] = "unknown"
+            car_dict[id] = car_data
