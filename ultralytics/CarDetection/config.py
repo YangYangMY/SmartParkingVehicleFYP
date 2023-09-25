@@ -85,24 +85,24 @@ LeftCamBottomExitLine = [300, 400, 550, 340]
 
 #Store each Park Lot Information
 #A1- A20, B1- B20, C1- C15, D1- D19
-ParkingLot = {}
-ParkingLot_empty = {"carId": "unknown", "parked": "no"}
-ParkingLot['A7'] = ParkingLot_empty.copy()
-ParkingLot['A8'] = ParkingLot_empty.copy()
-ParkingLot['A9']= ParkingLot_empty.copy()
-ParkingLot['A14'] = ParkingLot_empty.copy()
-ParkingLot['A15'] = ParkingLot_empty.copy()
-ParkingLot['A16'] = ParkingLot_empty.copy()
-ParkingLot['A17'] = ParkingLot_empty.copy()
+parking_lots = {}
+parking_lots_empty = {"carId": "unknown", "parked": "no"}
+parking_lots['A7'] = parking_lots_empty.copy()
+parking_lots['A8'] = parking_lots_empty.copy()
+parking_lots['A9'] = parking_lots_empty.copy()
+parking_lots['A14'] = parking_lots_empty.copy()
+parking_lots['A15'] = parking_lots_empty.copy()
+parking_lots['A16'] = parking_lots_empty.copy()
+parking_lots['A17'] = parking_lots_empty.copy()
 
 for i in range(20):
     i += 1
-    ParkingLot['D'+ str(i)] = ParkingLot_empty.copy()
-    ParkingLot['B'+ str(i)] = ParkingLot_empty.copy()
+    parking_lots['D'+ str(i)] = parking_lots_empty.copy()
+    parking_lots['B'+ str(i)] = parking_lots_empty.copy()
 
 for i in range(15):
     i += 1
-    ParkingLot['C'+ str(i)] = ParkingLot_empty.copy()
+    parking_lots['C'+ str(i)] = parking_lots_empty.copy()
 
 # Store each Parking lot Coordinate
 ParkingLotCoordinateRightCam = {}
