@@ -1,8 +1,5 @@
-import math
-from ultralytics import YOLO
-import timeit
-from CarDetection.sort import *
-from datetime import datetime
+from CarDetection.CarDetectController import *
+from CarDetection.CarDetectionAlgorithm import *
 from config import *
 
 
@@ -72,10 +69,12 @@ while cap1.isOpened() and cap2.isOpened() and cap3.isOpened():
             w, h = x2 - x1, y2 - y1
             cx, cy = x1 + w // 2, y1 + h // 2
 
-            #cvzone.putTextRect(frame1, f' {int(id)}', (max(0, x1), max(35, y1)),
-                               #scale=2, thickness=3, offset=10)
-            cv2.circle(frame1, (cx, cy), 5, (255, 0, 255), cv2.FILLED)
-
+            if (showCarID):
+                cvzone.putTextRect(frame1, f' {int(id)}', (max(0, x1), max(35, y1)), scale=2, thickness=3, offset=10)
+            if(showCarCenterDot):
+                cv2.circle(frame1, (cx, cy), 5, (255, 0, 255), cv2.FILLED)
+            if (showCarRecBox):
+                cvzone.cornerRect(frame1, (x1, y1, w, h), l=9, rt=5)
 
 
             # Check if the car ID already exists in the dictionary
@@ -137,8 +136,8 @@ while cap1.isOpened() and cap2.isOpened() and cap3.isOpened():
 
 
             #Parking Lot A1 - A20
-            cv2.polylines(frame1, [np.array(ParkingLot_D1, np.int32)], True, (0, 0, 255), 2)
-            resultsD1=cv2.pointPolygonTest(np.array(ParkingLot_D1,np.int32),((cx,cy)),False)
+            cv2.polylines(frame1, [np.array(ParkingLotCoordinateRightCam['D1'], np.int32)], True, (0, 0, 255), 2)
+            resultsD1=cv2.pointPolygonTest(np.array(ParkingLotCoordinateRightCam['D1'],np.int32),((cx,cy)),False)
             if resultsD1>=0:
                 if car_dict[id]["parkingLot"] == 'D1':
                     car_dict[id]["duration"] = (datetime.now() - car_dict[id]["parkingDetected"]).seconds
@@ -158,19 +157,11 @@ while cap1.isOpened() and cap2.isOpened() and cap3.isOpened():
                     ParkingLot['D1'] = {"carId": "unknown", "parked": "no"}
                     car_dict[id]["status"] = "moving"
 
-            cv2.polylines(frame1, [np.array(ParkingLot_D2, np.int32)], True, (0, 0, 255), 2)
+            # Call the function with appropriate parameters
+            process_parking(ParkingLotCoordinateRightCam, car_dict, id, cx, cy, 'D2')
 
-            cv2.polylines(frame1, [np.array(ParkingLot_A7, np.int32)], True, (0, 0, 255), 2)
-            cv2.polylines(frame1, [np.array(ParkingLot_A8, np.int32)], True, (0, 0, 255), 2)
-            cv2.polylines(frame1, [np.array(ParkingLot_A9, np.int32)], True, (0, 0, 255), 2)
-
-            cv2.polylines(frame1, [np.array(ParkingLot_B1, np.int32)], True, (0, 0, 255), 2)
-            cv2.polylines(frame1, [np.array(ParkingLot_B2, np.int32)], True, (0, 0, 255), 2)
-            cv2.polylines(frame1, [np.array(ParkingLot_B3, np.int32)], True, (0, 0, 255), 2)
-            cv2.polylines(frame1, [np.array(ParkingLot_B4, np.int32)], True, (0, 0, 255), 2)
-            cv2.polylines(frame1, [np.array(ParkingLot_B5, np.int32)], True, (0, 0, 255), 2)
-            cv2.polylines(frame1, [np.array(ParkingLot_B6, np.int32)], True, (0, 0, 255), 2)
-            cv2.polylines(frame1, [np.array(ParkingLot_B7, np.int32)], True, (0, 0, 255), 2)
+            # draw Parking Box coordinate
+            draw_parking_lot_polylines(frame1, ParkingLotCoordinateRightCam, showParkingLotBox)
 
 
         # Read a frame from the video
@@ -222,11 +213,17 @@ while cap1.isOpened() and cap2.isOpened() and cap3.isOpened():
                 x1, y1, x2, y2, id = results
                 x1, y1, x2, y2 = int(x1), int(y1), int(x2), int(y2)
                 w, h = x2 - x1, y2 - y1
-                cvzone.putTextRect(frame2, f' {int(id)}', (max(0, x1), max(35, y1)),
+                cx, cy = x1 + w // 2, y1 + h // 2
+
+                if (showCarID):
+                    cvzone.putTextRect(frame2, f' {int(id)}', (max(0, x1), max(35, y1)),
                                      scale=2, thickness=3, offset=10)
 
-                cx, cy = x1 + w // 2, y1 + h // 2
-                cv2.circle(frame2, (cx, cy), 5, (255, 0, 255), cv2.FILLED)
+                if (showCarCenterDot):
+                    cv2.circle(frame2, (cx, cy), 5, (255, 0, 255), cv2.FILLED)
+
+                if (showCarRecBox):
+                    cvzone.cornerRect(frame2, (x1, y1, w, h), l=9, rt=5)
 
                 # Check if the car ID already exists in the dictionary
                 if id in car_dict:
@@ -318,39 +315,10 @@ while cap1.isOpened() and cap2.isOpened() and cap3.isOpened():
                         car_temp5[id]["bbox"] = (x1, y1, x2, y2)
                         car_temp5[id]["currentLocation"] = "MiddleCam"
 
-            cv2.polylines(frame2, [np.array(ParkingLot_B8, np.int32)], True, (0, 0, 255), 2)
-            cv2.polylines(frame2, [np.array(ParkingLot_B9, np.int32)], True, (0, 0, 255), 2)
-            cv2.polylines(frame2, [np.array(ParkingLot_B10, np.int32)], True, (0, 0, 255), 2)
-            cv2.polylines(frame2, [np.array(ParkingLot_B11, np.int32)], True, (0, 0, 255), 2)
-            cv2.polylines(frame2, [np.array(ParkingLot_B12, np.int32)], True, (0, 0, 255), 2)
-            cv2.polylines(frame2, [np.array(ParkingLot_B13, np.int32)], True, (0, 0, 255), 2)
-            cv2.polylines(frame2, [np.array(ParkingLot_B14, np.int32)], True, (0, 0, 255), 2)
-            cv2.polylines(frame2, [np.array(ParkingLot_B15, np.int32)], True, (0, 0, 255), 2)
 
-            cv2.polylines(frame2, [np.array(ParkingLot_C1, np.int32)], True, (0, 0, 255), 2)
-            cv2.polylines(frame2, [np.array(ParkingLot_C2, np.int32)], True, (0, 0, 255), 2)
-            cv2.polylines(frame2, [np.array(ParkingLot_C3, np.int32)], True, (0, 0, 255), 2)
-            cv2.polylines(frame2, [np.array(ParkingLot_C4, np.int32)], True, (0, 0, 255), 2)
-            cv2.polylines(frame2, [np.array(ParkingLot_C5, np.int32)], True, (0, 0, 255), 2)
-            cv2.polylines(frame2, [np.array(ParkingLot_C6, np.int32)], True, (0, 0, 255), 2)
-            cv2.polylines(frame2, [np.array(ParkingLot_C7, np.int32)], True, (0, 0, 255), 2)
-            cv2.polylines(frame2, [np.array(ParkingLot_C8, np.int32)], True, (0, 0, 255), 2)
-            cv2.polylines(frame2, [np.array(ParkingLot_C9, np.int32)], True, (0, 0, 255), 2)
-            cv2.polylines(frame2, [np.array(ParkingLot_C10, np.int32)], True, (0, 0, 255), 2)
-            cv2.polylines(frame2, [np.array(ParkingLot_C11, np.int32)], True, (0, 0, 255), 2)
 
-            cv2.polylines(frame2, [np.array(ParkingLot_D3, np.int32)], True, (0, 0, 255), 2)
-            cv2.polylines(frame2, [np.array(ParkingLot_D4, np.int32)], True, (0, 0, 255), 2)
-            cv2.polylines(frame2, [np.array(ParkingLot_D5, np.int32)], True, (0, 0, 255), 2)
-            cv2.polylines(frame2, [np.array(ParkingLot_D6, np.int32)], True, (0, 0, 255), 2)
-            cv2.polylines(frame2, [np.array(ParkingLot_D7, np.int32)], True, (0, 0, 255), 2)
-            cv2.polylines(frame2, [np.array(ParkingLot_D8, np.int32)], True, (0, 0, 255), 2)
-            cv2.polylines(frame2, [np.array(ParkingLot_D9, np.int32)], True, (0, 0, 255), 2)
-            cv2.polylines(frame2, [np.array(ParkingLot_D10, np.int32)], True, (0, 0, 255), 2)
-            cv2.polylines(frame2, [np.array(ParkingLot_D11, np.int32)], True, (0, 0, 255), 2)
-            cv2.polylines(frame2, [np.array(ParkingLot_D12, np.int32)], True, (0, 0, 255), 2)
-            cv2.polylines(frame2, [np.array(ParkingLot_D13, np.int32)], True, (0, 0, 255), 2)
-            cv2.polylines(frame2, [np.array(ParkingLot_D14, np.int32)], True, (0, 0, 255), 2)
+            #draw Parking Box coordinate
+            draw_parking_lot_polylines(frame2, ParkingLotCoordinateMidCam, showParkingLotBox)
 
             # Read a frame from the video
             success3, frame3 = cap3.read()
@@ -383,9 +351,6 @@ while cap1.isOpened() and cap2.isOpened() and cap3.isOpened():
                     currentClass = classNames[cls]
 
                     if currentClass == "car" and conf > 0.3:
-                        # cvzone.putTextRect(frame2, f'{classNames[cls]} {conf}', (max(0, x1), max(35, y1)),
-                        #                scale=2, thickness=2, offset=5)
-                        # cvzone.cornerRect(frame2, (x1, y1, w, h), l=9, rt=5)
                         currentArray3 = np.array([x1, y1, x2, y2, conf])
                         detections3 = np.vstack((detections3, currentArray3))
 
@@ -404,10 +369,16 @@ while cap1.isOpened() and cap2.isOpened() and cap3.isOpened():
                 x1, y1, x2, y2, id = results
                 x1, y1, x2, y2 = int(x1), int(y1), int(x2), int(y2)
                 w, h = x2 - x1, y2 - y1
-                #cvzone.putTextRect(frame3, f' {int(id)}', (max(0, x1), max(35, y1)), scale=2, thickness=3, offset=10)
-
                 cx, cy = x1 + w // 2, y1 + h // 2
-                cv2.circle(frame3, (cx, cy), 5, (255, 0, 255), cv2.FILLED)
+
+                if (showCarID):
+                    cvzone.putTextRect(frame3, f' {int(id)}', (max(0, x1), max(35, y1)), scale=2, thickness=3, offset=10)
+
+                if (showCarCenterDot):
+                    cv2.circle(frame3, (cx, cy), 5, (255, 0, 255), cv2.FILLED)
+
+                if (showCarRecBox):
+                    cvzone.cornerRect(frame3, (x1, y1, w, h), l=9, rt=5)
 
                 # Check if the car ID already exists in the dictionary
                 if id in car_dict:
@@ -492,30 +463,10 @@ while cap1.isOpened() and cap2.isOpened() and cap3.isOpened():
                     if id in car_dict:
                         car_dict[id]["exitTime"] = datetime.now().strftime("%d-%m-%Y %H:%M:%S")
 
-                cv2.polylines(frame3, [np.array(ParkingLot_A14, np.int32)], True, (0, 0, 255), 2)
-                cv2.polylines(frame3, [np.array(ParkingLot_A15, np.int32)], True, (0, 0, 255), 2)
-                cv2.polylines(frame3, [np.array(ParkingLot_A16, np.int32)], True, (0, 0, 255), 2)
-                cv2.polylines(frame3, [np.array(ParkingLot_A17, np.int32)], True, (0, 0, 255), 2)
-
-                cv2.polylines(frame3, [np.array(ParkingLot_B16, np.int32)], True, (0, 0, 255), 2)
-                cv2.polylines(frame3, [np.array(ParkingLot_B17, np.int32)], True, (0, 0, 255), 2)
-                cv2.polylines(frame3, [np.array(ParkingLot_B18, np.int32)], True, (0, 0, 255), 2)
-                cv2.polylines(frame3, [np.array(ParkingLot_B19, np.int32)], True, (0, 0, 255), 2)
-                cv2.polylines(frame3, [np.array(ParkingLot_B20, np.int32)], True, (0, 0, 255), 2)
-
-                cv2.polylines(frame3, [np.array(ParkingLot_C12, np.int32)], True, (0, 0, 255), 2)
-                cv2.polylines(frame3, [np.array(ParkingLot_C13, np.int32)], True, (0, 0, 255), 2)
-                cv2.polylines(frame3, [np.array(ParkingLot_C14, np.int32)], True, (0, 0, 255), 2)
-                cv2.polylines(frame3, [np.array(ParkingLot_C15, np.int32)], True, (0, 0, 255), 2)
-
-                cv2.polylines(frame3, [np.array(ParkingLot_D15, np.int32)], True, (0, 0, 255), 2)
-                cv2.polylines(frame3, [np.array(ParkingLot_D16, np.int32)], True, (0, 0, 255), 2)
-                cv2.polylines(frame3, [np.array(ParkingLot_D17, np.int32)], True, (0, 0, 255), 2)
-                cv2.polylines(frame3, [np.array(ParkingLot_D18, np.int32)], True, (0, 0, 255), 2)
-                cv2.polylines(frame3, [np.array(ParkingLot_D19, np.int32)], True, (0, 0, 255), 2)
+                draw_parking_lot_polylines(frame3, ParkingLotCoordinateLeftCam, showParkingLotBox)
 
         print(car_dict)
-        print(ParkingLot)
+        print(ParkingLot['B8'])
         #print(car_dict)
         # Bottom Lane
         #print("1:", car_temp)  # Right Cam Exit
@@ -553,7 +504,7 @@ while cap1.isOpened() and cap2.isOpened() and cap3.isOpened():
         combined_frame = cv2.hconcat([resized_frame2, resized_frame1])
 
         # Display the combined frame
-        #cv2.imshow("temp1", resized_frame1)
+       # cv2.imshow("temp1", resized_frame1)
         #cv2.imshow("Video 2", resized_frame2)
         #cv2.imshow("Video 3", resized_frame3)
 
@@ -562,7 +513,7 @@ while cap1.isOpened() and cap2.isOpened() and cap3.isOpened():
         cv2.imshow("Video 3", resized_frame3)
 
         #Display frame for coordinate
-        #cv2.imshow("temp1", frame1)
+        #cv2.imshow("temp1", frame2)
         #cv2.imshow("temp2", frame2)
         #cv2.imshow("temp1", frame3)
 
