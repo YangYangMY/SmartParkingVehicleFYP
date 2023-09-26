@@ -61,9 +61,9 @@ def ShowVideoOutput(frame1, frame2, frame3, start1, start2, start3):
                 cv2.imshow("Video 1", frame1)
             if (showMidCam):
                 cv2.imshow("Video 2", frame2)
-                cv2.setMouseCallback('Video 2', RGB)
             if (showLeftCam):
                 cv2.imshow("Video 3", frame3)
+                cv2.setMouseCallback('Video 3', RGB)
 
 
 

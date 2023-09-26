@@ -72,13 +72,11 @@ LeftCamBottomExitLine = [300, 400, 550, 340]
 #A1- A20, B1- B20, C1- C15, D1- D19
 parking_lots = {}
 parking_lots_empty = {"carId": "unknown", "parked": "no"}
-parking_lots['A7'] = parking_lots_empty.copy()
-parking_lots['A8'] = parking_lots_empty.copy()
-parking_lots['A9'] = parking_lots_empty.copy()
-parking_lots['A14'] = parking_lots_empty.copy()
-parking_lots['A15'] = parking_lots_empty.copy()
-parking_lots['A16'] = parking_lots_empty.copy()
-parking_lots['A17'] = parking_lots_empty.copy()
+
+lotA_range = [7, 8, 9, 14, 15, 16, 17, 18]
+for number in lotA_range:
+    lot_name = f'A{number}'
+    parking_lots[lot_name] = parking_lots_empty.copy()
 
 for i in range(20):
     i += 1
@@ -167,6 +165,7 @@ parking_lots_data_left_cam = {
     'A15': [(877, 754), (473, 976), (362, 852), (748, 679)],
     'A16': [(730, 667), (339, 831), (223, 711), (596, 591)],
     'A17': [(577, 581), (208, 699), (148, 630), (481, 529)],
+    'A18': [(470, 522), (138, 621), (73, 557), (398, 477)],
     'B16': [(1235, 457), (1118, 510), (1015, 475), (1134, 431)],
     'B17': [(1115, 426), (996, 472), (904, 440), (1026, 403)],
     'B18': [(1006, 400), (893, 437), (824, 412), (942, 381)],
@@ -202,10 +201,10 @@ double_park_data_RightCam = {
     'T5': [(1101, 353),(1238, 405),(1162, 431),(1015, 380)],
     'T6': [(1015, 380),(1162, 431),(1067, 467),(923, 410)],
     'T7': [(923, 410),(1067, 467),(802, 572),(660, 491)],
-    'DB1': [(1079, 471),(1242, 524),(1129, 584),(972, 515)],
-    'DB2': [(972, 515),(1129, 584),(984, 657),(813, 578)],
-    'DB3': [(813, 578),(984, 657),(785, 758),(625, 654)],
-    'DB4': [(625, 654),(785, 758),(514, 900),(380, 755)],
+    'DB7': [(1079, 471),(1242, 524),(1129, 584),(972, 515)],
+    'DB8': [(972, 515),(1129, 584),(984, 657),(813, 578)],
+    'DB9': [(813, 578),(984, 657),(785, 758),(625, 654)],
+    'DB10': [(625, 654),(785, 758),(514, 900),(380, 755)],
 }
 
 double_park_covered_lots_RightCam = {
@@ -216,10 +215,10 @@ double_park_covered_lots_RightCam = {
     'T5': ["B4", "B5", "B6"],
     'T6': ["B5", "B6", "B7"],
     'T7': ["B6", "B7", "B8"],
-    'DB1': ["A7", "A8"],
-    'DB2': ["A7", "A8", "A9"],
-    'DB3': ["A8", "A9"],
-    'DB4': ["A9"],
+    'DB7': ["A7", "A8"],
+    'DB8': ["A7", "A8", "A9"],
+    'DB9': ["A8", "A9"],
+    'DB10': ["A9"],
 }
 
 # Convert parking lot data to the desired format and store in the ParkingLotCoordinate dictionary
@@ -266,5 +265,45 @@ for lot_name, coordinates in double_park_data_MidCam.items():
 for lot_name in double_park_data_MidCam.keys():
     double_park_lots[lot_name] = double_park_lots_empty.copy()
     covered_lots = list(double_park_covered_lots_MidCam[lot_name])
+    double_park_lots[lot_name]["covered_parking_lot"] = sorted(covered_lots)
+
+
+DoubleParkCoordinateLeftCam = {}
+
+# Parking Lot Data Left Cam
+double_park_data_LeftCam = {
+    'T16': [(1072, 533),(944, 588),(817, 534),(945, 491)],
+    'T17': [(945, 491),(817, 534),(718, 494),(843, 456)],
+    'T18': [(843, 456),(718, 494),(640, 461),(758, 425)],
+    'T19': [(758, 425),(640, 461),(561, 426),(678, 400)],
+    'T20': [(678, 400),(561, 426),(493, 398),(614, 378)],
+    'DB14': [(1131, 864),(1310, 753),(1082, 658),(913, 747)],
+    'DB15': [(913, 747),(1082, 658),(931, 596),(757, 663)],
+    'DB16': [(757, 663),(931, 596),(774, 526),(617, 585)],
+    'DB17': [(617, 585),(774, 526),(673, 482),(507, 523)],
+    'DB18': [(507, 523),(673, 482),(567, 435),(420, 471)],
+}
+
+double_park_covered_lots_LeftCam = {
+    'T16': ["B15", "B16", "B17"],
+    'T17': ["B16", "B17", "B18"],
+    'T18': ["B17", "B18", "B19"],
+    'T19': ["B18", "B19", "B20"],
+    'T20': ["B19","B20"],
+    'DB14': ["A14", "A15"],
+    'DB15': ["A14", "A15", "A16"],
+    'DB16': ["A15", "A16", "A17"],
+    'DB17': ["A16", "A17", "A18"],
+    'DB18': ["A17","A18"],
+}
+
+# Convert parking lot data to the desired format and store in the ParkingLotCoordinate dictionary
+for lot_name, coordinates in double_park_data_LeftCam.items():
+    DoubleParkCoordinateLeftCam[lot_name] = coordinates
+
+# Store each Double Park lot Coordinate
+for lot_name in double_park_data_LeftCam.keys():
+    double_park_lots[lot_name] = double_park_lots_empty.copy()
+    covered_lots = list(double_park_covered_lots_LeftCam[lot_name])
     double_park_lots[lot_name]["covered_parking_lot"] = sorted(covered_lots)
 

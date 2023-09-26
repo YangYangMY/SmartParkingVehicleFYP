@@ -395,10 +395,16 @@ while cap1.isOpened() and cap2.isOpened() and cap3.isOpened():
 
                     # draw Parking Box coordinate
                     draw_parking_lot_polylines(frame3, ParkingLotCoordinateLeftCam, showParkingLotBox, parking_lots, car_dict)
+                    draw_parking_lot_polylines(frame3, DoubleParkCoordinateLeftCam, showDoubleParkingLotBox,
+                                               double_park_lots, car_dict)
 
                     # Run Parking Detection Algorithm in Middle Camera
                     for parking_lot_name in parking_lots_data_left_cam.keys():
                         process_parking(parking_lots_data_left_cam, car_dict, id, cx, cy, parking_lot_name, parking_lots)
+
+                    for parking_lot_name in DoubleParkCoordinateLeftCam.keys():
+                        process_double_parking(DoubleParkCoordinateLeftCam, car_dict, id, cx, cy, parking_lot_name,
+                                               double_park_lots, parking_lots)
 
         # Print Car Dictionary Data
         #print(double_park_lots)

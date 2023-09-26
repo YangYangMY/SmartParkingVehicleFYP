@@ -20,10 +20,10 @@ DOUBLEPARK_TIME = 30  # seconds to determine if a car is double park or not
 
 
 #Output Video Settings
-showResizedVideo = True
+showResizedVideo = False
 showCombinedVideo = False #If this is enabled, showLeftCam & showMidCam & showRightCam won't work
-showLeftCam = False
-showMidCam = True
+showLeftCam = True
+showMidCam = False
 showRightCam = False
 showFPS = False
 
