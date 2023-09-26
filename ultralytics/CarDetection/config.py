@@ -20,10 +20,15 @@ classNames = ["person", "bicycle", "car", "motorbike", "aeroplane", "bus", "trai
               "teddy bear", "hair drier", "toothbrush"
               ]
 
+# Load the YOLO v8 pre-trained model
+modelm = YOLO('../Models/yolov8m.pt')
+modelx = YOLO('../Models/yolov8x.pt')
+
 #Store Car Dictionary
 copy_car_dict = {"carPlate": "unknown" ,"bbox": "unknown", "entryTime": "unknown",
                  "exitTime": "unknown", "status": "moving", "currentLocation": "unknown",
-                 "parkingLot": "unknown", "parkingDetected": "unknown", "duration": "unknown"}
+                 "parkingLot": "unknown", "parkingDetected": "unknown", "duration": "unknown",
+                 "isDoubleParked": "no", "doubleParkingLot": "unknown", "isDoubleParking": "no"}
 car_dict = {}
 
 #Temporary Car Dictionary
@@ -98,7 +103,7 @@ parking_lots_data_RightCam = {
     'B4': [(1125,317),(1090,342),(1017,287),(1053,269)],
     'B5': [(1047,328),(1015,356),(943,317),(962,274)],
     'B6': [(961,359),(908,380),(833,334),(870,304)],
-    'B7': [(863,400),(821,444),(707,389),(758,344)],
+    'B7': [(863,400),(809, 436),(707,389),(758,344)],
     'D1': [(837,205),(795,216),(746,186),(787,172)],
     'D2': [(769,209),(725,217),(690,186),(727,180)]
 }
@@ -181,3 +186,85 @@ parking_lots_data_left_cam = {
 # Convert parking lot data to the desired format and store in the ParkingLotCoordinate dictionary
 for lot_name, coordinates in parking_lots_data_left_cam.items():
     ParkingLotCoordinateLeftCam[lot_name] = coordinates
+
+# Store each Double Park lot Coordinate
+double_park_lots = {}
+double_park_lots_empty = {"carId": "unknown", "parked": "no", "covered_parking_lot": []}
+
+DoubleParkCoordinateRightCam = {}
+
+# Parking Lot Data Right Cam
+double_park_data_RightCam = {
+    'T1': [(1350, 281),(1468, 314),(1412, 334),(1300, 294)],
+    'T2': [(1300, 294),(1412, 334),(1360, 356),(1243, 314)],
+    'T3': [(1243, 314),(1360, 356),(1301, 382),(1180, 330)],
+    'T4': [(1180, 330),(1301, 382),(1238, 405),(1101, 353)],
+    'T5': [(1101, 353),(1238, 405),(1162, 431),(1015, 380)],
+    'T6': [(1015, 380),(1162, 431),(1067, 467),(923, 410)],
+    'T7': [(923, 410),(1067, 467),(802, 572),(660, 491)],
+    'DB1': [(1079, 471),(1242, 524),(1129, 584),(972, 515)],
+    'DB2': [(972, 515),(1129, 584),(984, 657),(813, 578)],
+    'DB3': [(813, 578),(984, 657),(785, 758),(625, 654)],
+    'DB4': [(625, 654),(785, 758),(514, 900),(380, 755)],
+}
+
+double_park_covered_lots_RightCam = {
+    'T1': ["B1", "B2"],
+    'T2': ["B1", "B2","B3"],
+    'T3': ["B2", "B3", "B4"],
+    'T4': ["B3", "B4", "B5"],
+    'T5': ["B4", "B5", "B6"],
+    'T6': ["B5", "B6", "B7"],
+    'T7': ["B6", "B7", "B8"],
+    'DB1': ["A7", "A8"],
+    'DB2': ["A7", "A8", "A9"],
+    'DB3': ["A8", "A9"],
+    'DB4': ["A9"],
+}
+
+# Convert parking lot data to the desired format and store in the ParkingLotCoordinate dictionary
+for lot_name, coordinates in double_park_data_RightCam.items():
+    DoubleParkCoordinateRightCam[lot_name] = coordinates
+
+# Store each Double Park lot Coordinate
+for lot_name in double_park_data_RightCam.keys():
+    double_park_lots[lot_name] = double_park_lots_empty.copy()
+    covered_lots = list(double_park_covered_lots_RightCam[lot_name])
+    double_park_lots[lot_name]["covered_parking_lot"] = sorted(covered_lots)
+
+
+DoubleParkCoordinateMidCam = {}
+
+# Parking Lot Data Right Cam
+double_park_data_MidCam = {
+    'T8': [(1882, 515),(1918, 661),(1755, 658),(1663, 511)],
+    'T9': [(1663, 511),(1755, 658),(1513, 660),(1439, 513)],
+    'T10': [(1439, 513),(1513, 660),(1253, 659),(1206, 512)],
+    'T11': [(1206, 512),(1253, 659),(993, 660),(980, 512)],
+    'T12': [(980, 512),(993, 660),(727, 660),(750, 510)],
+    'T13': [(750, 510),(727, 660),(457, 656),(522, 510)],
+    'T14': [(522, 510),(457, 656),(189, 657),(287, 513)],
+    'T15': [(287, 513),(189, 657),(1, 639),(70, 511)],
+}
+
+double_park_covered_lots_MidCam = {
+    'T8': ["B7", "B8", "B9"],
+    'T9': ["B8","B9", "B10"],
+    'T10': ["B9", "B10", "B11"],
+    'T11': ["B10", "B11", "B12"],
+    'T12': ["B11", "B12", "B13"],
+    'T13': ["B12", "B13", "B14"],
+    'T14': ["B13", "B14", "B15"],
+    'T15': ["B14", "B15", "B16"],
+}
+
+# Convert parking lot data to the desired format and store in the ParkingLotCoordinate dictionary
+for lot_name, coordinates in double_park_data_MidCam.items():
+    DoubleParkCoordinateMidCam[lot_name] = coordinates
+
+# Store each Double Park lot Coordinate
+for lot_name in double_park_data_MidCam.keys():
+    double_park_lots[lot_name] = double_park_lots_empty.copy()
+    covered_lots = list(double_park_covered_lots_MidCam[lot_name])
+    double_park_lots[lot_name]["covered_parking_lot"] = sorted(covered_lots)
+

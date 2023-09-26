@@ -110,11 +110,14 @@ while cap1.isOpened() and cap2.isOpened() and cap3.isOpened():
                             car_temp3[id]["entryTime"] = datetime.now().strftime("%d-%m-%Y %H:%M:%S")
                             car_temp3[id]["currentLocation"] = "RightCam"
 
-            draw_parking_lot_polylines(frame1, ParkingLotCoordinateRightCam, showParkingLotBox, parking_lots)
-            draw_parking_lot_polylines(frame1, DoubleParkCoordinateRightCam, showParkingLotBox, parking_lots)
+            draw_parking_lot_polylines(frame1, ParkingLotCoordinateRightCam, showParkingLotBox, parking_lots, car_dict)
+            draw_parking_lot_polylines(frame1, DoubleParkCoordinateRightCam, showDoubleParkingLotBox, double_park_lots, car_dict)
 
-            for parking_lot_name in parking_lots_data_RightCam.keys():
+            for parking_lot_name in ParkingLotCoordinateRightCam.keys():
                 process_parking(ParkingLotCoordinateRightCam, car_dict, id, cx, cy, parking_lot_name, parking_lots)
+
+            for parking_lot_name in DoubleParkCoordinateRightCam.keys():
+                process_double_parking(DoubleParkCoordinateRightCam, car_dict, id, cx, cy, parking_lot_name, double_park_lots, parking_lots)
 
         # Read a frame from the video
         success2, frame2 = cap2.read()
@@ -246,11 +249,17 @@ while cap1.isOpened() and cap2.isOpened() and cap3.isOpened():
                              (MiddleCamBottomExitLine[2], MiddleCamBottomExitLine[3]), (0, 255, 0), 5)
 
                 # Draw Parking Box coordinate
-                draw_parking_lot_polylines(frame2, ParkingLotCoordinateMidCam, showParkingLotBox, parking_lots)
+                draw_parking_lot_polylines(frame2, ParkingLotCoordinateMidCam, showParkingLotBox, parking_lots, car_dict)
+                draw_parking_lot_polylines(frame2, DoubleParkCoordinateMidCam, showDoubleParkingLotBox,
+                                           double_park_lots, car_dict)
 
                 # Run Parking Detection Algorithm in Middle Camera
                 for parking_lot_name in parking_lots_data_mid_cam.keys():
                     process_parking(parking_lots_data_mid_cam, car_dict, id, cx, cy, parking_lot_name, parking_lots)
+
+                for parking_lot_name in DoubleParkCoordinateMidCam.keys():
+                    process_double_parking(DoubleParkCoordinateMidCam, car_dict, id, cx, cy, parking_lot_name,
+                                           double_park_lots, parking_lots)
 
             # Read a frame from the video
             success3, frame3 = cap3.read()
@@ -385,14 +394,15 @@ while cap1.isOpened() and cap2.isOpened() and cap3.isOpened():
                             car_dict[id]["exitTime"] = datetime.now().strftime("%d-%m-%Y %H:%M:%S")
 
                     # draw Parking Box coordinate
-                    draw_parking_lot_polylines(frame3, ParkingLotCoordinateLeftCam, showParkingLotBox, parking_lots)
+                    draw_parking_lot_polylines(frame3, ParkingLotCoordinateLeftCam, showParkingLotBox, parking_lots, car_dict)
 
                     # Run Parking Detection Algorithm in Middle Camera
                     for parking_lot_name in parking_lots_data_left_cam.keys():
                         process_parking(parking_lots_data_left_cam, car_dict, id, cx, cy, parking_lot_name, parking_lots)
 
         # Print Car Dictionary Data
-        print(car_dict)
+        #print(double_park_lots)
+        #print(car_dict)
         # print(parking_lots['B8'])
         # print(car_dict)
         # Bottom Lane
