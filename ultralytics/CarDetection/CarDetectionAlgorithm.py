@@ -3,7 +3,7 @@ from datetime import datetime
 import cv2
 import numpy as np
 
-from CarDetection.CarDetectController import PARKING_TIME, DOUBLEPARK_TIME
+from CarDetection.CarDetectController import PARKING_TIME, DOUBLE_PARK_TIME
 from CarDetection.config import copy_car_dict
 
 def RGB(event, x, y, flags, param):
@@ -134,7 +134,7 @@ def process_double_parking(coordinates, car_dict, id, cx, cy, parking_lot_name, 
             duration = (current_time - car_data.get("parkingDetected", current_time)).seconds
             car_data["duration"] = duration
 
-            if duration > DOUBLEPARK_TIME:
+            if duration > DOUBLE_PARK_TIME:
                 car_data["status"] = "parked"
                 double_parking_lots[parking_lot_name]["carId"] = id
                 double_parking_lots[parking_lot_name]["parked"] = "yes"

@@ -16,8 +16,10 @@ showCarRecBox = False
 
 #Car Detection Settings
 PARKING_TIME = 30  # seconds to determine if a car is parked or not
-DOUBLEPARK_TIME = 30  # seconds to determine if a car is double park or not
+DOUBLE_PARK_TIME = 30  # seconds to determine if a car is double park or not
 
+#Google Sheet Settings
+EXPORT_GSHEET_TIME = 5  # seconds to export data to Google Sheet
 
 #Output Video Settings
 showResizedVideo = True

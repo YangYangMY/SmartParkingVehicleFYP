@@ -1,6 +1,7 @@
 from CarDetection.CarDetectController import *
 from CarDetection.CarDetectVideoOutput import ShowVideoOutput
 from CarDetection.CarDetectionAlgorithm import *
+from CarDetection.GoogleSheetIntergration import ExportDatatoGSheet
 from config import *
 
 
@@ -16,6 +17,9 @@ print("Current time:", current_time)
 if not cap1.isOpened() or not cap2.isOpened() or not cap3.isOpened():
     print("Error opening video files")
     exit()
+
+#Initialize the tracker for export data to GSheet
+last_export_time = time.time()
 
 # Loop through the video frames
 while cap1.isOpened() and cap2.isOpened() and cap3.isOpened():
@@ -405,6 +409,11 @@ while cap1.isOpened() and cap2.isOpened() and cap3.isOpened():
                     for parking_lot_name in DoubleParkCoordinateLeftCam.keys():
                         process_double_parking(DoubleParkCoordinateLeftCam, car_dict, id, cx, cy, parking_lot_name,
                                                double_park_lots, parking_lots)
+
+        # To export data to Google Sheets for every interval time
+        if time.time() - last_export_time >= EXPORT_GSHEET_TIME:
+            ExportDatatoGSheet(car_dict)  # Call the export function
+            last_export_time = time.time()  # Update the last export time
 
         # Print Car Dictionary Data
         #print(double_park_lots)

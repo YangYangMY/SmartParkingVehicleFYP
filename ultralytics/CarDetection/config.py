@@ -4,6 +4,7 @@ from ultralytics import YOLO
 import torch
 import timeit
 import cvzone
+import threading
 from CarDetection.sort import *
 from datetime import datetime
 
