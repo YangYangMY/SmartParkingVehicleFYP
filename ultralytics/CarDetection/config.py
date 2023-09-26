@@ -21,8 +21,8 @@ classNames = ["person", "bicycle", "car", "motorbike", "aeroplane", "bus", "trai
               ]
 
 # Load the YOLO v8 pre-trained model
-modelm = YOLO('../Models/yolov8m.pt')
-modelx = YOLO('../Models/yolov8x.pt')
+modelm = YOLO('Models/yolov8m.pt')
+modelx = YOLO('Models/yolov8x.pt')
 
 #Store Car Dictionary
 copy_car_dict = {"carPlate": "unknown" ,"bbox": "unknown", "entryTime": "unknown",
