@@ -20,7 +20,7 @@ DOUBLE_PARK_TIME = 30  # seconds to determine if a car is double park or not
 
 #Microsoft Excel Settings
 export_excel_time = 5  # seconds to export data to Google Sheet
-filename = "Output" + ".xlsx"
+filename = "CarDetectionData" + ".xlsx"
 column_names = ["carId", "carPlate", "bbox", "entryTime", "exitTime", "status", "currentLocation",
                 "parkingLot", "parkingDetected", "duration", "isDoubleParked", "doubleParkingLot", "isDoubleParking"]
 
