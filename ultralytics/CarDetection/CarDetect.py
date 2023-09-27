@@ -9,7 +9,7 @@ import logging
 
 # Create a shared variable to control the expo
 # rt thread
-stop_export_thread = False
+stop_all_func = False
 # Initialize the Excel application (outside the function)
 app = xw.apps.active
 
@@ -18,12 +18,12 @@ app = xw.apps.active
 def export_data_to_excel_thread(ExportExcel_filename, formatted_current_time, car_dict_column_names, car_dict, parking_lots_column_names, parking_lots, double_park_lots_column_names, double_park_lots):
     try:
         global app  # Use the globally defined Excel application instance
-        global stop_export_thread  # Set the flag to stop the thread
+        global stop_all_func  # Set the flag to stop the thread
 
         if app is None:
             app = xw.App(visible=True)  # Start a new instance if Excel is not running
 
-        while not stop_export_thread:  # Check the flag in each iteration
+        while not stop_all_func:  # Check the flag in each iteration
             try:
                 # Get the current date and time for creating a new filename
                 filename = f"{ExportExcel_filename}_{formatted_current_time}.xlsx"
@@ -53,18 +53,18 @@ def export_data_to_excel_thread(ExportExcel_filename, formatted_current_time, ca
         logging.error(f"An error occurred ({type(e).__name__}): {str(e)}")
     finally:
         if app is not None:
-            stop_export_thread = True  # Set the flag to stop the thread
+            stop_all_func = True  # Set the flag to stop the thread
             app.quit()  # Close the Excel application
 
 # Main video processing function
 def process_video():
-    global stop_export_thread  # Access the shared variable
+    global stop_all_func  # Access the shared variable
 
     while cap1.isOpened() and cap2.isOpened() and cap3.isOpened():
         # Read a frame from the video
         success1, frame1 = cap1.read()
 
-        if success1 and frame1 is not None and stop_export_thread is False:
+        if success1 and frame1 is not None and stop_all_func is False:
             # Start the timer
             start1 = timeit.default_timer()
 
@@ -167,7 +167,7 @@ def process_video():
             # Read a frame from the video
             success2, frame2 = cap2.read()
 
-            if success2 and frame2 is not None:
+            if success2 and frame2 is not None and stop_all_func is False:
                 # Start the timer
                 start2 = timeit.default_timer()
 
@@ -310,7 +310,7 @@ def process_video():
                 # Read a frame from the video
                 success3, frame3 = cap3.read()
 
-                if success3 and frame3 is not None:
+                if success3 and frame3 is not None and stop_all_func is False:
                     # Start the timer
                     start3 = timeit.default_timer()
 
@@ -455,16 +455,24 @@ def process_video():
 
                         for parking_lot_name in DoubleParkCoordinateLeftCam.keys():
                             process_double_parking(DoubleParkCoordinateLeftCam, car_dict, id, cx, cy, parking_lot_name,
-                                                   double_park_lots, parking_lots)
 
+                                                   double_park_lots, parking_lots)
+                    # Break the loop if 'q' is pressed
+                    if cv2.waitKey(1) & 0xFF == ord("q") or stop_all_func:
+                        stop_all_func = True
+                        break
                 else:
                     # Break the loop if the end of the video is reached
-                    stop_export_thread = True
+                    stop_all_func = True
                     break
 
+                # Break the loop if 'q' is pressed
+                if cv2.waitKey(1) & 0xFF == ord("q") or stop_all_func:
+                    stop_all_func = True
+                    break
             else:
                 # Break the loop if the end of the video is reached
-                stop_export_thread = True
+                stop_all_func = True
                 break
             #print(car_dict)
 
@@ -472,12 +480,12 @@ def process_video():
             ShowVideoOutput(frame1,frame2,frame3, start1, start2, start3)
 
             # Break the loop if 'q' is pressed
-            if cv2.waitKey(1) & 0xFF == ord("q") or stop_export_thread:
-                stop_export_thread = True
+            if cv2.waitKey(1) & 0xFF == ord("q") or stop_all_func:
+                stop_all_func = True
                 break
         else:
             # Break the loop if the end of the video is reached
-            stop_export_thread = True
+            stop_all_func = True
             app.quit()
             break
 
@@ -504,9 +512,17 @@ def main():
         export_thread = threading.Thread(target=export_data_to_excel_thread, args=(ExportExcel_filename, formatted_current_time, car_dict_column_names, car_dict, parking_lots_column_names,  parking_lots, double_park_lots_column_names, double_park_lots))
         export_thread.start()
 
+        # Create a folder for log files (if it doesn't exist)
+        log_folder = "logs"  # You can change this folder name to your preference
+        if not os.path.exists(log_folder):
+            os.makedirs(log_folder)
+
+        # Specify the path to the log file
+        log_file_path = os.path.join(log_folder, f"{formatted_current_time}_error.log")
+
         # Configure logging settings
         logging.basicConfig(
-            filename='error.log',
+            filename=log_file_path,
             level=logging.ERROR,
             format='%(asctime)s - %(levelname)s - %(pathname)s:%(lineno)d - %(message)s'
         )
