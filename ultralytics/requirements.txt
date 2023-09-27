@@ -15,9 +15,7 @@ cvzone==1.6.1
 scikit-image>=0.21.0
 filterpy>=1.4.5
 chardet==5.2.0
-google-api-python-client>=2.0.2
-google-auth-httplib2>=0.1.0
-google-auth-oauthlib>=0.4.6
+xlwings>= 0.30.12
 
 
 # Logging -------------------------------------

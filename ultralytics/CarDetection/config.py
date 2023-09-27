@@ -26,10 +26,10 @@ modelm = YOLO('Models/yolov8m.pt')
 modelx = YOLO('Models/yolov8x.pt')
 
 #Store Car Dictionary
-copy_car_dict = {"carPlate": "unknown" ,"bbox": "unknown", "entryTime": "unknown",
-                 "exitTime": "unknown", "status": "moving", "currentLocation": "unknown",
-                 "parkingLot": "unknown", "parkingDetected": "unknown", "duration": "unknown",
-                 "isDoubleParked": "no", "doubleParkingLot": "unknown", "isDoubleParking": "no"}
+copy_car_dict = {"carPlate": "-" ,"bbox": "-", "entryTime": "-",
+                 "exitTime": "-", "status": "moving", "currentLocation": "-",
+                 "parkingLot": "-", "parkingDetected": "-", "duration": "-",
+                 "isDoubleParked": "no", "doubleParkingLot": "-", "isDoubleParking": "no"}
 car_dict = {}
 
 #Temporary Car Dictionary
@@ -72,7 +72,7 @@ LeftCamBottomExitLine = [300, 400, 550, 340]
 #Store each Park Lot Information
 #A1- A20, B1- B20, C1- C15, D1- D19
 parking_lots = {}
-parking_lots_empty = {"carId": "unknown", "parked": "no"}
+parking_lots_empty = {"carId": "-", "parked": "no"}
 
 lotA_range = [7, 8, 9, 14, 15, 16, 17, 18]
 for number in lotA_range:
@@ -189,7 +189,7 @@ for lot_name, coordinates in parking_lots_data_left_cam.items():
 
 # Store each Double Park lot Coordinate
 double_park_lots = {}
-double_park_lots_empty = {"carId": "unknown", "parked": "no", "covered_parking_lot": []}
+double_park_lots_empty = {"carId": "-", "parked": "no", "covered_parking_lot": []}
 
 DoubleParkCoordinateRightCam = {}
 

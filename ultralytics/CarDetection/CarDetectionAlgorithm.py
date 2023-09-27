@@ -98,7 +98,7 @@ def process_parking(coordinates, car_dict, id, cx, cy, parking_lot_name, parking
             parking_lots[parking_lot_name]["carId"] = id
             parking_lots[parking_lot_name]["parked"] = "no"
             car_data["status"] = "moving"
-            car_data["exitTime"] = "unknown"
+            car_data["exitTime"] = "-"
 
         car_dict[id] = car_data
 
@@ -106,12 +106,12 @@ def process_parking(coordinates, car_dict, id, cx, cy, parking_lot_name, parking
         # Car is no longer inside the parking lot
         car_data = car_dict.get(id, {})
         if car_data.get("parkingLot") == parking_lot_name:
-            parking_lots[parking_lot_name]["carId"] = "unknown"
+            parking_lots[parking_lot_name]["carId"] = "-"
             parking_lots[parking_lot_name]["parked"] = "no"
-            car_data["parkingDetected"] = "unknown"
-            car_data["parkingLot"] = "unknown"
+            car_data["parkingDetected"] = "-"
+            car_data["parkingLot"] = "-"
             car_data["status"] = "moving"
-            car_data["duration"] = "unknown"
+            car_data["duration"] = "-"
             car_dict[id] = car_data
 
 
@@ -144,8 +144,8 @@ def process_double_parking(coordinates, car_dict, id, cx, cy, parking_lot_name, 
                 all_covered_parking_lot = double_parking_lots[parking_lot_name]["covered_parking_lot"]
                 for covered_parking_lot in all_covered_parking_lot:
                     if covered_parking_lot in parking_lots and parking_lots[covered_parking_lot]["parked"] == "yes":
-                        car_id = parking_lots[covered_parking_lot].get("carId", "unknown")
-                        if car_id != "unknown" and car_id != id:
+                        car_id = parking_lots[covered_parking_lot].get("carId", "-")
+                        if car_id != "-" and car_id != id:
                             double_parked_cars.append(car_id)
 
                 # Update the double parked cars' data
@@ -164,7 +164,7 @@ def process_double_parking(coordinates, car_dict, id, cx, cy, parking_lot_name, 
             double_parking_lots[parking_lot_name]["carId"] = id
             double_parking_lots[parking_lot_name]["parked"] = "no"
             car_data["status"] = "moving"
-            car_data["exitTime"] = "unknown"
+            car_data["exitTime"] = "-"
 
         car_dict[id] = car_data
 
@@ -172,28 +172,28 @@ def process_double_parking(coordinates, car_dict, id, cx, cy, parking_lot_name, 
         # Car is no longer inside the parking lot
         car_data = car_dict.get(id, {})
         if car_data.get("parkingLot") == parking_lot_name:
-            car_data["parkingDetected"] = "unknown"
-            car_data["parkingLot"] = "unknown"
+            car_data["parkingDetected"] = "-"
+            car_data["parkingLot"] = "-"
             car_data["status"] = "moving"
-            car_data["duration"] = "unknown"
+            car_data["duration"] = "-"
             car_data["isDoubleParking"] = "no"
 
             if double_parking_lots[parking_lot_name]["carId"] == id:
                 # Remove the car ID from double_parking_lots
-                double_parking_lots[parking_lot_name]["carId"] = "unknown"
+                double_parking_lots[parking_lot_name]["carId"] = "-"
 
                 if double_parking_lots[parking_lot_name]["parked"] == "yes":
                     # Set isDoubleParked to "yes" for other cars that are parked in covered_parking_lots
                     all_covered_parking_lot = double_parking_lots[parking_lot_name]["covered_parking_lot"]
                     for covered_parking_lot in all_covered_parking_lot:
                         if covered_parking_lot in parking_lots and parking_lots[covered_parking_lot]["parked"] == "yes":
-                            car_id = parking_lots[covered_parking_lot].get("carId", "unknown")
-                            if car_id != "unknown" and car_id != id:
+                            car_id = parking_lots[covered_parking_lot].get("carId", "-")
+                            if car_id != "-" and car_id != id:
                                 double_parked_cars.append(car_id)
 
                     # Clear isDoubleParked and doubleParkingLot for any blocked cars
                     for double_parked_car_id in double_parked_cars:
-                        car_dict[double_parked_car_id]["doubleParkingLot"] = "unknown"
+                        car_dict[double_parked_car_id]["doubleParkingLot"] = "-"
                         car_dict[double_parked_car_id]["isDoubleParked"] = "no"
 
                 double_parking_lots[parking_lot_name]["parked"] = "no"

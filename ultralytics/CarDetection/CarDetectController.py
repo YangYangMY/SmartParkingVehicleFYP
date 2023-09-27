@@ -18,8 +18,12 @@ showCarRecBox = False
 PARKING_TIME = 30  # seconds to determine if a car is parked or not
 DOUBLE_PARK_TIME = 30  # seconds to determine if a car is double park or not
 
-#Google Sheet Settings
-EXPORT_GSHEET_TIME = 5  # seconds to export data to Google Sheet
+#Microsoft Excel Settings
+export_excel_time = 5  # seconds to export data to Google Sheet
+filename = "Output" + ".xlsx"
+column_names = ["carId", "carPlate", "bbox", "entryTime", "exitTime", "status", "currentLocation",
+                "parkingLot", "parkingDetected", "duration", "isDoubleParked", "doubleParkingLot", "isDoubleParking"]
+
 
 #Output Video Settings
 showResizedVideo = True

@@ -1,7 +1,7 @@
 from CarDetection.CarDetectController import *
 from CarDetection.CarDetectVideoOutput import ShowVideoOutput
 from CarDetection.CarDetectionAlgorithm import *
-from CarDetection.GoogleSheetIntergration import ExportDatatoGSheet
+from CarDetection.MicrosoftExcelIntergration import ExportDatatoGSheet
 from config import *
 
 
@@ -411,7 +411,7 @@ while cap1.isOpened() and cap2.isOpened() and cap3.isOpened():
                                                double_park_lots, parking_lots)
 
         # To export data to Google Sheets for every interval time
-        if time.time() - last_export_time >= EXPORT_GSHEET_TIME:
+        if time.time() - last_export_time >= export_excel_time:
             ExportDatatoGSheet(car_dict)  # Call the export function
             last_export_time = time.time()  # Update the last export time
 

@@ -1,17 +1,35 @@
 from CarDetection.CarDetectController import *
 from CarDetection.CarDetectVideoOutput import ShowVideoOutput
 from CarDetection.CarDetectionAlgorithm import *
-from CarDetection.GoogleSheetIntergration import ExportDatatoGSheet
+from CarDetection.MicrosoftExcelIntergration import update_excel_with_data
 from config import *
+import xlwings as xw
 
 # Create a shared variable to control the export thread
 stop_export_thread = False
 
-# Create a function to export data in a separate thread
-def export_data_thread(car_dict):
-    while not stop_export_thread:  # Check the flag in each iteration
-        ExportDatatoGSheet(car_dict)
-        time.sleep(EXPORT_GSHEET_TIME)
+# Function to export data periodically
+def export_data_to_excel_thread(filename, sheet_name, column_names, car_dict):
+    try:
+        app = xw.apps.active
+
+        if app is None:
+            app = xw.App(visible=True)  # Start a new instance if Excel is not running
+
+        while not stop_export_thread:  # Check the flag in each iteration
+            if len(car_dict) > 0:  # Check if the dictionary is not empty
+                try:
+                    update_excel_with_data(app, filename, sheet_name, column_names, car_dict)  # Pass app as an argument
+                    print("Data successfully uploaded to Excel.")
+                except Exception as e:
+                    print(f"An error occurred ({type(e).__name__}):", str(e))
+                time.sleep(export_excel_time + 10)  # Adjust sleep time as needed
+
+    except Exception as e:
+        print(f"An error occurred ({type(e).__name__}):", str(e))
+    finally:
+        if app is not None:
+            app.quit()  # Quit Excel when the loop is done
 
 
 # Main video processing function
@@ -84,7 +102,7 @@ def process_video():
                     if id in car_temp and id in car_dict and car_dict[id]["currentLocation"] == "RightCam" and car_dict[
                         id].get("status") == "moving":
                         car_temp[id] = car_dict[id]
-                        if car_dict[id].get("carPlate") == "unknown":
+                        if car_dict[id].get("carPlate") == "-":
                             car_dict[id]["carPlate"] = "test"
                     else:
                         car_temp[id] = copy_car_dict.copy()
@@ -98,7 +116,7 @@ def process_video():
                     if id in car_temp3 and id in car_dict and car_dict[id]["currentLocation"] == "RightCam" and \
                             car_dict[id]["status"] == "moving":
                         car_temp3[id] = car_dict[id]
-                        if car_dict[id]["carPlate"] == "unknown":
+                        if car_dict[id]["carPlate"] == "-":
                             car_dict[id]["carPlate"] = "test"
                     else:
                         for results2 in resultsTracker2:
@@ -180,7 +198,7 @@ def process_video():
                                  (MiddleCamMiddleEntryLine[2], MiddleCamMiddleEntryLine[3]), (0, 255, 0), 5)
                         if id in car_temp4 and id in car_dict and car_dict[id]["currentLocation"] == "MiddleCam":
                             car_temp4[id] = car_dict[id]
-                            if car_dict[id]["carPlate"] == "unknown":
+                            if car_dict[id]["carPlate"] == "-":
                                 for results in resultsTracker:
                                     x1, y1, x2, y2, id2 = results
                                     x1, y1, x2, y2 = int(x1), int(y1), int(x2), int(y2)
@@ -193,7 +211,7 @@ def process_video():
                             car_temp4[id] = copy_car_dict.copy()
                             car_temp4[id]["bbox"] = (x1, y1, x2, y2)
                             car_temp4[id]["currentLocation"] = "MiddleCam"
-                            if car_dict[id]["carPlate"] == "unknown":
+                            if car_dict[id]["carPlate"] == "-":
                                 for results in resultsTracker:
                                     x1, y1, x2, y2, id2 = results
                                     x1, y1, x2, y2 = int(x1), int(y1), int(x2), int(y2)
@@ -219,7 +237,7 @@ def process_video():
                                  (MiddleCamBottomEntryLine[2], MiddleCamBottomEntryLine[3]), (0, 255, 0), 5)
                         if id in car_temp2 and id in car_dict and car_dict[id]["currentLocation"] == "MiddleCam":
                             car_temp2[id] = car_dict[id]
-                            if car_dict[id].get("carPlate") == "unknown":
+                            if car_dict[id].get("carPlate") == "-":
                                 for results in resultsTracker:
                                     x1, y1, x2, y2, id2 = results
                                     x1, y1, x2, y2 = int(x1), int(y1), int(x2), int(y2)
@@ -235,7 +253,7 @@ def process_video():
                             car_temp2[id]["currentLocation"] = "MiddleCam"
 
                             if id in car_dict and "carPlate" in car_dict[id]:
-                                if (car_dict[id]["carPlate"] == "unknown"):
+                                if (car_dict[id]["carPlate"] == "-"):
                                     for results in resultsTracker:
                                         x1, y1, x2, y2, id2 = results
                                         x1, y1, x2, y2 = int(x1), int(y1), int(x2), int(y2)
@@ -329,7 +347,7 @@ def process_video():
                                 car_temp8[id] = copy_car_dict.copy()
                                 car_temp8[id]["bbox"] = (x1, y1, x2, y2)
                                 car_temp8[id]["currentLocation"] = "LeftCam"
-                                if car_dict[id]["carPlate"] == "unknown":
+                                if car_dict[id]["carPlate"] == "-":
                                     for results in resultsTracker2:
                                         x1, y1, x2, y2, id2 = results
                                         x1, y1, x2, y2 = int(x1), int(y1), int(x2), int(y2)
@@ -344,7 +362,7 @@ def process_video():
                                 car_temp8[id] = copy_car_dict.copy()
                                 car_temp8[id]["bbox"] = (x1, y1, x2, y2)
                                 car_temp8[id]["currentLocation"] = "LeftCam"
-                                if car_dict[id]["carPlate"] == "unknown":
+                                if car_dict[id]["carPlate"] == "-":
                                     for results in resultsTracker2:
                                         x1, y1, x2, y2, id2 = results
                                         x1, y1, x2, y2 = int(x1), int(y1), int(x2), int(y2)
@@ -361,7 +379,7 @@ def process_video():
                                      (LeftCamBottomEntryLine[2], LeftCamBottomEntryLine[3]), (0, 255, 0), 5)
                             if id in car_temp6 and id in car_dict and car_dict[id]["currentLocation"] == "LeftCam":
                                 car_temp6[id] = car_dict[id]
-                                if car_dict[id]["carPlate"] == "unknown":
+                                if car_dict[id]["carPlate"] == "-":
                                     for results in resultsTracker2:
                                         x1, y1, x2, y2, id2 = results
                                         x1, y1, x2, y2 = int(x1), int(y1), int(x2), int(y2)
@@ -376,7 +394,7 @@ def process_video():
                                 car_temp6[id] = copy_car_dict.copy()
                                 car_temp6[id]["bbox"] = (x1, y1, x2, y2)
                                 car_temp6[id]["currentLocation"] = "LeftCam"
-                                if car_dict[id]["carPlate"] == "unknown":
+                                if car_dict[id]["carPlate"] == "-":
                                     for results in resultsTracker2:
                                         x1, y1, x2, y2, id2 = results
                                         x1, y1, x2, y2 = int(x1), int(y1), int(x2), int(y2)
@@ -415,6 +433,8 @@ def process_video():
                             process_double_parking(DoubleParkCoordinateLeftCam, car_dict, id, cx, cy, parking_lot_name,
                                                    double_park_lots, parking_lots)
 
+            #print(car_dict)
+
             #To display Video Output
             ShowVideoOutput(frame1,frame2,frame3, start1, start2, start3)
 
@@ -442,7 +462,8 @@ def main():
     current_time = datetime.now().strftime("%d-%m-%Y %H:%M:%S")
     print("Current time:", current_time)
 
-    export_thread = threading.Thread(target=export_data_thread, args=(car_dict,))
+    sheet_name = datetime.now().strftime("%d-%m-%Y %H-%M-%S")
+    export_thread = threading.Thread(target=export_data_to_excel_thread, args=(filename, sheet_name, column_names, car_dict))
     export_thread.start()
 
     # Start video processing
