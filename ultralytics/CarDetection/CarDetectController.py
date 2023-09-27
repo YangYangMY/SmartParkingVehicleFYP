@@ -19,11 +19,13 @@ PARKING_TIME = 30  # seconds to determine if a car is parked or not
 DOUBLE_PARK_TIME = 30  # seconds to determine if a car is double park or not
 
 #Microsoft Excel Settings
+export_excel = True  # export data to Google Sheet
 export_excel_time = 5  # seconds to export data to Google Sheet
-filename = "CarDetectionData" + ".xlsx"
-column_names = ["carId", "carPlate", "bbox", "entryTime", "exitTime", "status", "currentLocation",
+ExportExcel_filename = "CarDetectionData"
+car_dict_column_names = ["carId", "carPlate", "bbox", "entryTime", "exitTime", "status", "currentLocation",
                 "parkingLot", "parkingDetected", "duration", "isDoubleParked", "doubleParkingLot", "isDoubleParking"]
-
+double_park_lots_column_names = ["parkingLot", "carId", "parked"]
+parking_lots_column_names = ["parkingLot", "carId", "parked"]
 
 #Output Video Settings
 showResizedVideo = True
@@ -35,17 +37,17 @@ showFPS = False
 
 #Video File Settings
 # Open the video file 1
-video_path1 = "VideoFootage/rightCam2.mp4"
+video_path1 = "VideoFootage/rightCam4.mp4"
 cap1 = cv2.VideoCapture(video_path1)
 mask1 = cv2.imread("MaskImage/maskRightCamera.png")
 
 # Open the video file 2
-video_path2 = "VideoFootage/midCam2.mp4"
+video_path2 = "VideoFootage/midCam4.mp4"
 cap2 = cv2.VideoCapture(video_path2)
 mask2 = cv2.imread("MaskImage/maskMiddleCamera.png")
 
 # Open the video file 3
-video_path3 = "VideoFootage/leftCam2.mp4"
+video_path3 = "VideoFootage/leftCam4.mp4"
 cap3 = cv2.VideoCapture(video_path3)
 mask3 = cv2.imread("MaskImage/maskLeftCamera.png")
 

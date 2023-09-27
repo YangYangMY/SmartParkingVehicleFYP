@@ -1,7 +1,8 @@
 from CarDetection.CarDetectController import *
 from CarDetection.CarDetectVideoOutput import ShowVideoOutput
 from CarDetection.CarDetectionAlgorithm import *
-from CarDetection.MicrosoftExcelIntergration import update_excel_with_data
+from CarDetection.MicrosoftExcelIntergration import update_excel_with_car_dict, update_excel_with_parking_lots, \
+    update_excel_with_double_parking_lots
 from config import *
 import xlwings as xw
 import logging
@@ -9,29 +10,51 @@ import logging
 # Create a shared variable to control the expo
 # rt thread
 stop_export_thread = False
+# Initialize the Excel application (outside the function)
+app = xw.apps.active
+
 
 # Function to export data periodically
-def export_data_to_excel_thread(filename, sheet_name, column_names, car_dict):
+def export_data_to_excel_thread(ExportExcel_filename, formatted_current_time, car_dict_column_names, car_dict, parking_lots_column_names, parking_lots, double_park_lots_column_names, double_park_lots):
     try:
-        app = xw.apps.active
+        global app  # Use the globally defined Excel application instance
+        global stop_export_thread  # Set the flag to stop the thread
 
         if app is None:
             app = xw.App(visible=True)  # Start a new instance if Excel is not running
 
         while not stop_export_thread:  # Check the flag in each iteration
-            if len(car_dict) > 0:  # Check if the dictionary is not empty
-                try:
-                    update_excel_with_data(app, filename, sheet_name, column_names, car_dict)  # Pass app as an argument
-                except Exception as e:
-                    logging.error(f"An error occurred ({type(e).__name__}): {str(e)}")
-                time.sleep(export_excel_time + 10)  # Adjust sleep time as needed
+            try:
+                # Get the current date and time for creating a new filename
+                filename = f"{ExportExcel_filename}_{formatted_current_time}.xlsx"
+                full_path = os.path.join("OutputData", filename)
+
+                # Check if the file already exists
+                if os.path.exists(full_path):
+                    logging.warning(f"File '{full_path}' already exists. It will be overwritten.")
+
+                # Open the Excel workbook or create a new one
+                wb = app.books.open(full_path) if os.path.exists(full_path) else app.books.add()
+
+                # Store data in the sheet
+                update_excel_with_double_parking_lots(app, wb, filename, full_path, "Double Parking Lots", double_park_lots_column_names, double_park_lots)
+                update_excel_with_parking_lots(app, wb, filename, full_path, "Parking Lots", parking_lots_column_names, parking_lots)
+                update_excel_with_car_dict(app, wb, filename, full_path, "Car Data", car_dict_column_names, car_dict)
+
+                # Save the workbook (this keeps it open)
+                wb.save(full_path)
+
+            except Exception as e:
+                logging.error(f"An error occurred ({type(e).__name__}): {str(e)}")
+
+            time.sleep(export_excel_time + 10)  # Adjust sleep time as needed
 
     except Exception as e:
         logging.error(f"An error occurred ({type(e).__name__}): {str(e)}")
     finally:
         if app is not None:
-            app.quit()  # Quit Excel when the loop is done
-
+            stop_export_thread = True  # Set the flag to stop the thread
+            app.quit()  # Close the Excel application
 
 # Main video processing function
 def process_video():
@@ -41,7 +64,7 @@ def process_video():
         # Read a frame from the video
         success1, frame1 = cap1.read()
 
-        if success1:
+        if success1 and frame1 is not None and stop_export_thread is False:
             # Start the timer
             start1 = timeit.default_timer()
 
@@ -144,7 +167,7 @@ def process_video():
             # Read a frame from the video
             success2, frame2 = cap2.read()
 
-            if success2:
+            if success2 and frame2 is not None:
                 # Start the timer
                 start2 = timeit.default_timer()
 
@@ -287,7 +310,7 @@ def process_video():
                 # Read a frame from the video
                 success3, frame3 = cap3.read()
 
-                if success3:
+                if success3 and frame3 is not None:
                     # Start the timer
                     start3 = timeit.default_timer()
 
@@ -434,17 +457,28 @@ def process_video():
                             process_double_parking(DoubleParkCoordinateLeftCam, car_dict, id, cx, cy, parking_lot_name,
                                                    double_park_lots, parking_lots)
 
+                else:
+                    # Break the loop if the end of the video is reached
+                    stop_export_thread = True
+                    break
+
+            else:
+                # Break the loop if the end of the video is reached
+                stop_export_thread = True
+                break
             #print(car_dict)
 
             #To display Video Output
             ShowVideoOutput(frame1,frame2,frame3, start1, start2, start3)
 
             # Break the loop if 'q' is pressed
-            if cv2.waitKey(1) & 0xFF == ord("q"):
+            if cv2.waitKey(1) & 0xFF == ord("q") or stop_export_thread:
                 stop_export_thread = True
                 break
         else:
             # Break the loop if the end of the video is reached
+            stop_export_thread = True
+            app.quit()
             break
 
     # Release video capture objects and close windows
@@ -464,8 +498,10 @@ def main():
         current_time = datetime.now().strftime("%d-%m-%Y %H:%M:%S")
         print("Current time:", current_time)
 
-        sheet_name = datetime.now().strftime("%d-%m-%Y %H-%M-%S")
-        export_thread = threading.Thread(target=export_data_to_excel_thread, args=(filename, sheet_name, column_names, car_dict))
+
+        formatted_current_time = datetime.now().strftime("%d-%m-%Y_%H-%M-%S")
+
+        export_thread = threading.Thread(target=export_data_to_excel_thread, args=(ExportExcel_filename, formatted_current_time, car_dict_column_names, car_dict, parking_lots_column_names,  parking_lots, double_park_lots_column_names, double_park_lots))
         export_thread.start()
 
         # Configure logging settings
