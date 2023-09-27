@@ -47,8 +47,8 @@ def update_excel_with_data(app, filename, sheet_name, column_names, car_dict):
         # Use xlwings to write data to the Excel sheet
         sheet.range('A1').options(index=False, header=True).value = existing_data
 
-        print("Data successfully updated in Excel.")
         # Save the workbook
+        wb.save()  # Save the changes to the Excel file
 
     except Exception as e:
         print(f"An error occurred ({type(e).__name__}): {str(e)}")
