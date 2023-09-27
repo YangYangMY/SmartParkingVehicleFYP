@@ -1,4 +1,6 @@
 # Function to update data in Excel file
+import logging
+
 import pandas as pd
 
 # Function to update data in Excel file
@@ -51,4 +53,4 @@ def update_excel_with_data(app, filename, sheet_name, column_names, car_dict):
         wb.save()  # Save the changes to the Excel file
 
     except Exception as e:
-        print(f"An error occurred ({type(e).__name__}): {str(e)}")
+        logging.error(f"An error occurred ({type(e).__name__}): {str(e)}")

@@ -4,8 +4,10 @@ from CarDetection.CarDetectionAlgorithm import *
 from CarDetection.MicrosoftExcelIntergration import update_excel_with_data
 from config import *
 import xlwings as xw
+import logging
 
-# Create a shared variable to control the export thread
+# Create a shared variable to control the expo
+# rt thread
 stop_export_thread = False
 
 # Function to export data periodically
@@ -20,13 +22,12 @@ def export_data_to_excel_thread(filename, sheet_name, column_names, car_dict):
             if len(car_dict) > 0:  # Check if the dictionary is not empty
                 try:
                     update_excel_with_data(app, filename, sheet_name, column_names, car_dict)  # Pass app as an argument
-                    print("Data successfully uploaded to Excel.")
                 except Exception as e:
-                    print(f"An error occurred ({type(e).__name__}):", str(e))
+                    logging.error(f"An error occurred ({type(e).__name__}): {str(e)}")
                 time.sleep(export_excel_time + 10)  # Adjust sleep time as needed
 
     except Exception as e:
-        print(f"An error occurred ({type(e).__name__}):", str(e))
+        logging.error(f"An error occurred ({type(e).__name__}): {str(e)}")
     finally:
         if app is not None:
             app.quit()  # Quit Excel when the loop is done
@@ -454,23 +455,35 @@ def process_video():
 
 # Main function
 def main():
-    if torch.cuda.is_available():
-        print("Running on GPU")
-    else:
-        print("Running on CPU")
+    try:
+        if torch.cuda.is_available():
+            print("Running on GPU")
+        else:
+            print("Running on CPU")
 
-    current_time = datetime.now().strftime("%d-%m-%Y %H:%M:%S")
-    print("Current time:", current_time)
+        current_time = datetime.now().strftime("%d-%m-%Y %H:%M:%S")
+        print("Current time:", current_time)
 
-    sheet_name = datetime.now().strftime("%d-%m-%Y %H-%M-%S")
-    export_thread = threading.Thread(target=export_data_to_excel_thread, args=(filename, sheet_name, column_names, car_dict))
-    export_thread.start()
+        sheet_name = datetime.now().strftime("%d-%m-%Y %H-%M-%S")
+        export_thread = threading.Thread(target=export_data_to_excel_thread, args=(filename, sheet_name, column_names, car_dict))
+        export_thread.start()
 
-    # Start video processing
-    process_video()
+        # Configure logging settings
+        logging.basicConfig(
+            filename='error.log',
+            level=logging.ERROR,
+            format='%(asctime)s - %(levelname)s - %(pathname)s:%(lineno)d - %(message)s'
+        )
 
-    # Wait for the export thread to finish (if needed)
-    export_thread.join()
+
+        # Start video processing
+        process_video()
+
+        # Wait for the export thread to finish (if needed)
+        export_thread.join()
+
+    except Exception as e:
+        logging.error(f"An error occurred ({type(e).__name__}): {str(e)}")
 
 if __name__ == "__main__":
     main()
