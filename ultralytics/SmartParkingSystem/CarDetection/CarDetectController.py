@@ -30,25 +30,24 @@ parking_lots_column_names = ["parkingLot", "carId", "parked"]
 #Output Video Settings
 showParkingOccupancy = True
 showResizedVideo = True
-showCombinedVideo = True #If this is enabled, showLeftCam & showMidCam & showRightCam won't work
 showLeftCam = True
-showMidCam = False
-showRightCam = False
-showFPS = False
+showMidCam = True
+showRightCam = True
+showFPS = True
 
 #Video File Settings
 # Open the video file 1
-video_path1 = "CarDetection/VideoFootage/rightCam4.mp4"
+video_path1 = "CarDetection/VideoFootage/rightCamera1080.mp4"
 cap1 = cv2.VideoCapture(video_path1)
 mask1 = cv2.imread("CarDetection/MaskImage/maskRightCamera.png")
 
 # Open the video file 2
-video_path2 = "CarDetection/VideoFootage/midCam4.mp4"
+video_path2 = "CarDetection/VideoFootage/middleCamera1080.mp4"
 cap2 = cv2.VideoCapture(video_path2)
 mask2 = cv2.imread("CarDetection/MaskImage/maskMiddleCamera.png")
 
 # Open the video file 3
-video_path3 = "CarDetection/VideoFootage/leftCam4.mp4"
+video_path3 = "CarDetection/VideoFootage/leftCamera1080.mp4"
 cap3 = cv2.VideoCapture(video_path3)
 mask3 = cv2.imread("CarDetection/MaskImage/maskLeftCamera.png")
 

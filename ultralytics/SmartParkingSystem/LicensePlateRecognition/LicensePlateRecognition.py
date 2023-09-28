@@ -27,7 +27,7 @@ pattern1 = re.compile(r'^[A-Z]{3}\d{4}$')
 pattern2 = re.compile(r'^[A-Z]{2}\d{4}[A-Z]$')
 
 # --------  Load the video --------
-cap = cv2.VideoCapture("LicensePlateRecognition/testing.mp4")
+cap = cv2.VideoCapture("LicensePlateRecognition/entryCamera1080.mp4")
 mask = cv2.imread("LicensePlateRecognition/maskLicensePlate.png")
 # cap = cv2.VideoCapture("car_video.mp4")
 
@@ -129,7 +129,7 @@ def car_plate_video():
                 break
 
     except Exception as e:
-        print(f"An error occurred ({type(e).__name__}): {str(e)}")
+        logging.error(f"An error occurred ({type(e).__name__}): {str(e)}")
 
     # Release the video capture and close
     cap.release()
