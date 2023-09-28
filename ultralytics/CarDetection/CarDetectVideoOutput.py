@@ -2,7 +2,7 @@ from CarDetectController import *
 from CarDetection.CarDetectionAlgorithm import RGB
 from config import *
 
-def ShowVideoOutput(frame1, frame2, frame3, start1, start2, start3):
+def ShowVideoOutput(frame1, frame2, frame3, start1, start2, start3, parking_lots):
     if(showResizedVideo):
         # Resize the annotated frame to a maximum width and height of 600 pixels
         resized_frame1 = cv2.resize(frame1, (800, 600))
@@ -21,6 +21,18 @@ def ShowVideoOutput(frame1, frame2, frame3, start1, start2, start3):
             cv2.putText(resized_frame2, "FPS: " + "{:.2f}".format(yolo_fps2), (20, 30), cv2.FONT_HERSHEY_SIMPLEX, 0.8, (0, 0, 255), 2)
             cv2.putText(resized_frame3, "FPS: " + "{:.2f}".format(yolo_fps3), (20, 30), cv2.FONT_HERSHEY_SIMPLEX, 0.8,(0, 0, 255), 2)
 
+        # Calculate parking occupancy
+        if showParkingOccupancy:
+            total_parking_spaces = len(parking_lots)
+            occupied_spaces = sum(1 for space_info in parking_lots.values() if space_info['parked'] == 'yes')
+
+            if total_parking_spaces > 0:
+                parkingOccupancy = total_parking_spaces - occupied_spaces
+            else:
+                parkingOccupancy = 0
+
+            cv2.putText(resized_frame3, "Available Spaces: " + str(parkingOccupancy), (20, 60),
+                        cv2.FONT_HERSHEY_SIMPLEX, 0.8, (0, 0, 255), 2)
         if (showCombinedVideo):
             # Combine the frames side by side
             combined_frame = cv2.hconcat([resized_frame2, resized_frame1])
@@ -49,6 +61,12 @@ def ShowVideoOutput(frame1, frame2, frame3, start1, start2, start3):
             cv2.putText(frame2, "FPS: " + "{:.2f}".format(yolo_fps2), (20, 30), cv2.FONT_HERSHEY_SIMPLEX, 0.8, (0, 0, 255), 2)
             cv2.putText(frame3, "FPS: " + "{:.2f}".format(yolo_fps3), (20, 30), cv2.FONT_HERSHEY_SIMPLEX, 0.8,(0, 0, 255), 2)
 
+        if (showParkingOccupancy):
+            parkingOccupancy = len(parking_lots[parking_lots["parked"] == 'yes']) / len(parking_lots)
+
+            # Display the parking occupancy on the left top of the screen
+            cv2.putText(frame3, "Parking Occupancy: " + "{:.2f}".format(parkingOccupancy), (20, 60), cv2.FONT_HERSHEY_SIMPLEX, 0.8,(0, 0, 255), 2)
+
         if (showCombinedVideo):
             # Combine the frames side by side
             combined_frame = cv2.hconcat([frame2, frame1])
@@ -63,7 +81,7 @@ def ShowVideoOutput(frame1, frame2, frame3, start1, start2, start3):
                 cv2.imshow("Video 2", frame2)
             if (showLeftCam):
                 cv2.imshow("Video 3", frame3)
-                cv2.setMouseCallback('Video 3', RGB)
+                #cv2.setMouseCallback('Video 3', RGB)
 
 
 

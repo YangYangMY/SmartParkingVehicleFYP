@@ -477,7 +477,7 @@ def process_video():
             #print(car_dict)
 
             #To display Video Output
-            ShowVideoOutput(frame1,frame2,frame3, start1, start2, start3)
+            ShowVideoOutput(frame1,frame2,frame3, start1, start2, start3, parking_lots)
 
             # Break the loop if 'q' is pressed
             if cv2.waitKey(1) & 0xFF == ord("q") or stop_all_func:

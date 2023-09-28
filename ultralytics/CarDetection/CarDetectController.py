@@ -28,6 +28,7 @@ double_park_lots_column_names = ["parkingLot", "carId", "parked"]
 parking_lots_column_names = ["parkingLot", "carId", "parked"]
 
 #Output Video Settings
+showParkingOccupancy = True
 showResizedVideo = True
 showCombinedVideo = True #If this is enabled, showLeftCam & showMidCam & showRightCam won't work
 showLeftCam = True
