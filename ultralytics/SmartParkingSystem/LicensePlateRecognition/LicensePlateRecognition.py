@@ -119,7 +119,6 @@ def car_plate_video():
                                             (0, 0, 255),
                                             4)
                 # Play the video
-                print(frame)
                 ResizedframeOutput = cv2.resize(frame, (1060, 640))
                 cv2.imshow("OCR Detection", ResizedframeOutput)
 
