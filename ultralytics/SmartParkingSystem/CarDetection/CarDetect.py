@@ -184,7 +184,7 @@ def process_video_camera1():
                         process_double_parking(DoubleParkCoordinateRightCam, car_dict, id, cx, cy, parking_lot_name,
                                                double_park_lots, parking_lots)
                 if(showRightCam):
-                    ShowVideoOutput(frame, start_time, "Camera 1")
+                    ShowVideoOutput(frame, start_time, "Camera 1", parking_lots)
 
                 # Break the loop if 'q' is pressed
                 if cv2.waitKey(1) & 0xFF == ord("q"):
@@ -345,7 +345,7 @@ def process_video_camera2():
                                                double_park_lots, parking_lots)
 
                 if(showMidCam):
-                    ShowVideoOutput(frame, start_time, "Camera 2")
+                    ShowVideoOutput(frame, start_time, "Camera 2", parking_lots)
 
                 # Break the loop if 'q' is pressed
                 if cv2.waitKey(1) & 0xFF == ord("q"):
@@ -511,7 +511,7 @@ def process_video_camera3():
                         process_double_parking(DoubleParkCoordinateLeftCam, car_dict, id, cx, cy, parking_lot_name,
                                                double_park_lots, parking_lots)
                 if(showLeftCam):
-                    ShowVideoOutput(frame, start_time, "Camera 3")
+                    ShowVideoOutput(frame, start_time, "Camera 3", parking_lots)
 
                 if cv2.waitKey(1) & 0xFF == ord("q"):
                     stop_all_func = True

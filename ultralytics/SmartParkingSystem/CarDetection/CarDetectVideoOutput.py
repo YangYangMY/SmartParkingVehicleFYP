@@ -4,10 +4,9 @@ import timeit
 import cv2
 
 from SmartParkingSystem.CarDetection.CarDetectController import showResizedVideo, showFPS, showParkingOccupancy
-from SmartParkingSystem.CarDetection.config import parking_lots
 
 
-def ShowVideoOutput(frame, start_time, window_name):
+def ShowVideoOutput(frame, start_time, window_name, parking_lots):
     if (showResizedVideo):
         # Resize the annotated frame to a maximum width and height of 600 pixels
         resized_frame = cv2.resize(frame, (800, 600))
@@ -31,7 +30,7 @@ def ShowVideoOutput(frame, start_time, window_name):
             else:
                 parkingOccupancy = 0
 
-            cv2.putText(frame, "Available Spaces: " + str(parkingOccupancy), (20, 60),
+            cv2.putText(resized_frame, "Available Spaces: " + str(parkingOccupancy), (20, 60),
                         cv2.FONT_HERSHEY_SIMPLEX, 0.8, (0, 0, 255), 2)
 
         cv2.imshow(window_name, resized_frame)
