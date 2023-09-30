@@ -4,6 +4,7 @@ import timeit
 import cv2
 
 from SmartParkingSystem.CarDetection.CarDetectController import showResizedVideo, showFPS, showParkingOccupancy
+from SmartParkingSystem.CarDetection.CarDetectionAlgorithm import RGB
 
 
 def ShowVideoOutput(frame, start_time, window_name, parking_lots):
@@ -38,7 +39,7 @@ def ShowVideoOutput(frame, start_time, window_name, parking_lots):
     else:
         if (showFPS):
             # Stop the timer and calculate the FPS
-            end = timeit.default_timer()
+            end = time.time()
             yolo_fps = 1 / (end - start_time)
 
             # Display the frame rate on the left top of the screen
@@ -59,4 +60,4 @@ def ShowVideoOutput(frame, start_time, window_name, parking_lots):
                         cv2.FONT_HERSHEY_SIMPLEX, 0.8, (0, 0, 255), 2)
 
         cv2.imshow(window_name, frame)
-        # cv2.setMouseCallback(window_name, RGB)
+        #cv2.setMouseCallback(window_name, RGB)

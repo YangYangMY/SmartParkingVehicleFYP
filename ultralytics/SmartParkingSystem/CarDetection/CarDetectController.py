@@ -28,8 +28,9 @@ double_park_lots_column_names = ["parkingLot", "carId", "parked"]
 parking_lots_column_names = ["parkingLot", "carId", "parked"]
 
 #Output Video Settings
+common_frame_rate = 8  # Adjust as needed
 showParkingOccupancy = True
-showResizedVideo = True
+showResizedVideo = False
 showLeftCam = True
 showMidCam = True
 showRightCam = True

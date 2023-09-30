@@ -13,7 +13,7 @@ import numpy as np
 
 from SmartParkingSystem.CarDetection.CarDetectController import cap1, cap2, cap3, mask1, mask2, mask3, \
     showParkingLotLine, showCarID, showCarCenterDot, showCarRecBox, showParkingLotBox, showDoubleParkingLotBox, \
-    export_excel_time, showRightCam, showMidCam, showLeftCam
+    export_excel_time, showRightCam, showMidCam, showLeftCam, common_frame_rate
 from SmartParkingSystem.CarDetection.CarDetectVideoOutput import ShowVideoOutput
 from SmartParkingSystem.CarDetection.CarDetectionAlgorithm import update_car_info, check_car_cross_line1, \
     check_car_cross_line2, draw_parking_lot_polylines, process_parking, process_double_parking, check_car_cross_line3
@@ -26,6 +26,7 @@ from SmartParkingSystem.CarDetection.config import modelm, classNames, tracker, 
     car_temp2, ParkingLotCoordinateMidCam, DoubleParkCoordinateMidCam, parking_lots_data_mid_cam, \
     LeftCamMiddleEntryLine, LeftCamMiddleExitLine, LeftCamBottomEntryLine, LeftCamBottomExitLine, car_temp8, car_temp6, \
     car_temp5, ParkingLotCoordinateLeftCam, DoubleParkCoordinateLeftCam, parking_lots_data_left_cam
+from SmartParkingSystem.LicensePlateRecognition.LicensePlateRecognition import retreive_ocr_result, final_ocr_results
 
 # Shared Variable
 # Create a shared variable to control all the function
@@ -139,6 +140,11 @@ def process_video_camera1():
                             cv2.line(frame, (RightCamEntryLine[0], RightCamEntryLine[1]),
                                      (RightCamEntryLine[2], RightCamEntryLine[3]), (0, 255, 0), 5)
                             car_dict[id]["currentLocation"] = "RightCam"
+                            if car_dict[id].get("carPlate") == "-":
+                                print("Original Car Plate:", car_dict[id]["carPlate"])
+                                car_dict[id]["carPlate"] = retreive_ocr_result()
+                                print("Car Plate:", car_dict[id]["carPlate"])
+                                print("CAR LIST:", final_ocr_results)
 
                     if check_car_cross_line2(RightCamBottomLine, cx, cy):
                         cv2.line(frame, (RightCamBottomLine[0], RightCamBottomLine[1]),
@@ -146,8 +152,7 @@ def process_video_camera1():
                         if id in car_temp and id in car_dict and car_dict[id]["currentLocation"] == "RightCam" and car_dict[
                             id].get("status") == "moving":
                             car_temp[id] = car_dict[id]
-                            if car_dict[id].get("carPlate") == "-":
-                                car_dict[id]["carPlate"] = "test"
+
                         else:
                             car_temp[id] = copy_car_dict.copy()
                             car_temp[id]["bbox"] = (x1, y1, x2, y2)
@@ -160,8 +165,6 @@ def process_video_camera1():
                         if id in car_temp3 and id in car_dict and car_dict[id]["currentLocation"] == "RightCam" and \
                                 car_dict[id]["status"] == "moving":
                             car_temp3[id] = car_dict[id]
-                            if car_dict[id]["carPlate"] == "-":
-                                car_dict[id]["carPlate"] = "test"
                         else:
                             for results2 in resultsTracker2:
                                 x3, y3, x4, y4, id2 = map(int, results2)
@@ -190,10 +193,15 @@ def process_video_camera1():
                 if cv2.waitKey(1) & 0xFF == ord("q"):
                     stop_all_func = True
 
+                # Calculate the elapsed time and sleep if needed to match the common frame rate
+                elapsed_time = time.time() - start_time
+                sleep_duration = max(0, 1 / common_frame_rate - elapsed_time)
+                time.sleep(sleep_duration)
+
             else:
                 stop_all_func = True
     except Exception as e:
-        logging.error(f"An error occurred ({type(e).__name__}): {str(e)}")
+        logging.warning(f"An error occurred ({type(e).__name__}): {str(e)}")
     finally:
         # Release the video capture object for camera 1
         cap1.release()
@@ -351,6 +359,11 @@ def process_video_camera2():
                 if cv2.waitKey(1) & 0xFF == ord("q"):
                     stop_all_func = True
                     break
+
+                # Calculate the elapsed time and sleep if needed to match the common frame rate
+                elapsed_time = time.time() - start_time
+                sleep_duration = max(0, 1 / common_frame_rate - elapsed_time)
+                time.sleep(sleep_duration)
 
             else:
                 stop_all_func = True
@@ -515,6 +528,11 @@ def process_video_camera3():
 
                 if cv2.waitKey(1) & 0xFF == ord("q"):
                     stop_all_func = True
+
+                # Calculate the elapsed time and sleep if needed to match the common frame rate
+                elapsed_time = time.time() - start_time
+                sleep_duration = max(0, 1 / common_frame_rate - elapsed_time)
+                time.sleep(sleep_duration)
 
             else:
                 stop_all_func = True

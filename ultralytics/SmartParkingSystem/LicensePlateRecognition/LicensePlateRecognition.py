@@ -1,6 +1,7 @@
 import logging
-import threading
+import time
 
+from SmartParkingSystem.CarDetection.CarDetectController import common_frame_rate
 from ultralytics import YOLO
 import cv2
 import pytesseract
@@ -22,31 +23,60 @@ classNames = ["person", "bicycle", "car", "motorbike", "aeroplane", "bus", "trai
               "teddy bear", "hair drier", "toothbrush"
               ]
 
+final_ocr_results = []
+
 # Define regular expressions for both formats
 pattern1 = re.compile(r'^[A-Z]{3}\d{4}$')
 pattern2 = re.compile(r'^[A-Z]{2}\d{4}[A-Z]$')
 
 # --------  Load the video --------
 cap = cv2.VideoCapture("LicensePlateRecognition/entryCamera1080.mp4")
-mask = cv2.imread("LicensePlateRecognition/maskLicensePlate.png")
+# mask = cv2.imread("LicensePlateRecognition/maskLicensePlate.png")
 # cap = cv2.VideoCapture("car_video.mp4")
 
-#print('Frame width:', int(cap.get(cv2.CAP_PROP_FRAME_WIDTH)))
-#print('Frame height:', int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT)))
 
 # Coordinates of Detection Region
 bbox_x1, bbox_y1, bbox_x2, bbox_y2 = 605, 329, 1016, 546
 # Coordinates:  [299, 199], [400, 200], [397, 254], [310, 257]
 
+# Coordinates of Detection Region (Region that clear OCR_results)
+x1_clear, y1_clear, x2_clear, y2_clear = 1, 329, 560, 600
+# Coordinates:  [1, 196], [335, 193], [333, 324], [1, 328]
+
 stop_all_func = False
+most_frequent_result = ""
+temp = ""
+
+def retreive_ocr_result():
+    global final_ocr_results
+    if final_ocr_results:
+        first_value = final_ocr_results.pop(0)
+        return first_value
+    else:
+        # Handle the case where the list is empty
+        return None
+
 
 def car_plate_video():
-    global stop_all_func
+    global stop_all_func, temp
+    global most_frequent_result
+    unknown_stored = False
+    clean_result = False
+    leave_green_region = False
+    ocr_results = {}
+
     try:
         while cap.isOpened():
             ret, frame = cap.read()
 
             if ret and frame is not None:
+                start_time = time.time()
+                # --------  Draw Detection Region Bounding Box --------
+                cv2.rectangle(frame, (bbox_x1, bbox_y1), (bbox_x2, bbox_y2), (0, 200, 0), 2)
+
+                # --------  Draw Detection Region Bounding Box (For clear) --------
+                cv2.rectangle(frame, (x1_clear, y1_clear), (x2_clear, y2_clear), (0, 0, 200), 3)
+
                 # Detect license plate
                 plateDetections = model(frame, stream=True, verbose=False)
 
@@ -59,9 +89,6 @@ def car_plate_video():
                         x1, y1, x2, y2 = int(x1), int(y1), int(x2), int(y2)
                         conf = box.conf[0]
                         cls = int(box.cls[0])
-
-                        # --------  Draw Detection Region Bounding Box --------
-                        cv2.rectangle(frame, (bbox_x1, bbox_y1), (bbox_x2, bbox_y2), (0, 200, 0), 2)
 
                         # -------- Crop license plate in Region  ----------
                         if cls == 0 and conf > 0.5:
@@ -76,11 +103,10 @@ def car_plate_video():
                                 (0, 255, 0),
                                 2
                             )
-                            # print(x1, y1, x2, y2)
+
                             if x1 >= bbox_x1 and y1 >= bbox_y1 and x2 <= bbox_x2 and y2 <= bbox_y2:
-                                print("Plate Detected in region.")
+                                # print("Plate Detected in region.")
                                 cropped = frame[y1:y2, x1:x2]
-                                print("Beep")
 
                                 # -------- Preprocess cropped license plate ---------
                                 gray = cv2.cvtColor(cropped, cv2.COLOR_BGR2GRAY)
@@ -91,13 +117,12 @@ def car_plate_video():
                                 # Thresholding the image
                                 rect, threshold = cv2.threshold(blur, 120, 255, cv2.THRESH_TOZERO)
                                 plate_num = pytesseract.image_to_string(threshold, lang='eng')
-                                # print("Beep")
 
                                 # --------- Casting ---------
                                 # Remove any spaces and convert to uppercase
                                 plate_num = re.sub(r'[^a-zA-Z0-9]', '', plate_num)
                                 cleaned_result = plate_num.replace(" ", "").upper()
-                                print(cleaned_result)
+                                # print(cleaned_result)
 
                                 # Check if it matches either format
                                 if pattern1.match(cleaned_result):
@@ -107,9 +132,18 @@ def car_plate_video():
                                     # Format as "AB 1234 C"
                                     formatted_result = f"{cleaned_result[:2]} {cleaned_result[2:6]} {cleaned_result[6]}"
                                 else:
-                                    formatted_result = "Invalid license plate format"
+                                    if not unknown_stored:
+                                        formatted_result = "UNKNOWN"
+                                        unknown_stored = True
+                                    else:
+                                        formatted_result = "UNKNOWN"
 
-                                # print('Formated Result: ', formatted_result)
+                                # Keep track of each identified ocr result
+                                if formatted_result in ocr_results:
+                                    if unknown_stored is False or formatted_result != "UNKNOWN":
+                                        ocr_results[formatted_result] += 1
+                                else:
+                                    ocr_results[formatted_result] = 1
 
                                 cv2.putText(frame,
                                             "Licence plate number: " + formatted_result,
@@ -118,13 +152,47 @@ def car_plate_video():
                                             1.5,
                                             (0, 0, 255),
                                             4)
+
+                            # Car leaves the green region
+                            if x1 >= x1_clear and y1 >= y1_clear and x2 <= x2_clear and y2 <= y2_clear:
+                                # Stored the most frequent result before cleared
+                                most_frequent_result = max(ocr_results, key=ocr_results.get, default=None)
+                                temp = most_frequent_result
+                                clean_result = True
+
+                            # Append the most frequent OCR result after the car leaves the green region but before clear the ocr_results
+                            if clean_result:
+                                if temp is not None:
+                                    final_ocr_results.append(temp)
+
+                                #print("OCR Result cleared.")
+                                ocr_results = {}
+                                clean_result = False
+
+                           #print("OCR Results:", ocr_results)
+                            #print("Most Frequent OCR Result:", most_frequent_result)
+                #print("List for pass: ", final_ocr_results)
+
                 # Play the video
                 ResizedframeOutput = cv2.resize(frame, (1060, 640))
                 cv2.imshow("OCR Detection", ResizedframeOutput)
 
+
+                # Find the most frequent OCR result
+                # most_frequent_result = max(ocr_results, key=ocr_results.get, default="UNKNOWN")
+                # print("Most Frequent OCR Result:", most_frequent_result)
+
+                # if len(ocr_results) >= 1:
+                #     # Append into a new list
+                #     final_ocr_results.append(most_frequent_result)
+                #     print(final_ocr_results)
+
+
                 if cv2.waitKey(1) & 0XFF == ord('q'):
                     stop_all_func = True
                     break
+
+
             else:
                 break
 

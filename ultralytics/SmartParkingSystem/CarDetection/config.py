@@ -45,7 +45,7 @@ tracker3 = Sort(max_age=120, min_hits=5, iou_threshold=0.3) #Store for left Came
 totalCount = []
 
 # Store the coordinates for right camera
-RightCamEntryLine = [1020, 175, 1157, 158]
+RightCamEntryLine = [1048, 192, 1167, 162]
 RightCamMiddleLine = [700, 210, 730, 250]
 RightCamBottomLine = [930, 430, 1180, 550]
 

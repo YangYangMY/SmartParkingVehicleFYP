@@ -60,7 +60,8 @@ def main():
 
         # Car Detection
         formatted_current_time = datetime.now().strftime("%d-%m-%Y_%H-%M-%S")
-        export_thread = threading.Thread(target=export_data_to_excel_thread, args=(ExportExcel_filename, formatted_current_time, car_dict_column_names, car_dict, parking_lots_column_names,  parking_lots, double_park_lots_column_names, double_park_lots))
+        export_thread = threading.Thread(target=export_data_to_excel_thread, args=(ExportExcel_filename, formatted_current_time, car_dict_column_names,
+                                                                                   car_dict, parking_lots_column_names,  parking_lots, double_park_lots_column_names, double_park_lots))
 
         # Create a folder for log files (if it doesn't exist)
         log_folder = "logs"  # You can change this folder name to your preference
@@ -85,7 +86,7 @@ def main():
         thread_camera2 = threading.Thread(target=process_video_camera2)
         thread_camera3 = threading.Thread(target=process_video_camera3)
 
-        print("Start ALL Camera THREAD")
+       # print("Start ALL Camera THREAD")
         # Start the threads
         thread_camera1.start()
         thread_camera2.start()
@@ -95,7 +96,7 @@ def main():
         process_car_plate_video_thread.start()
 
 
-        print("starting export thread")
+       # print("starting export thread")
         export_thread.start()
 
         # Open the reference video
@@ -113,7 +114,7 @@ def main():
             synchronize_videos(cv2.VideoCapture("LicensePlateRecognition/entryCamera1080.mp4"), reference_timestamp, reference_timestamp, "OCR Detection")
 
 
-        export_thread.join()
+        #export_thread.join()
         process_car_plate_video_thread.join()
         thread_camera1.join()
         thread_camera2.join()
