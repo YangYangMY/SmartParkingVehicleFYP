@@ -54,7 +54,7 @@ def retreive_ocr_result():
         return first_value
     else:
         # Handle the case where the list is empty
-        return None
+        return "Unknown"
 
 
 def car_plate_video():
@@ -171,7 +171,7 @@ def car_plate_video():
 
                            #print("OCR Results:", ocr_results)
                             #print("Most Frequent OCR Result:", most_frequent_result)
-                #print("List for pass: ", final_ocr_results)
+                            print("List for pass: ", final_ocr_results)
 
                 # Play the video
                 ResizedframeOutput = cv2.resize(frame, (1060, 640))

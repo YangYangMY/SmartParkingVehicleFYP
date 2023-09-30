@@ -337,6 +337,15 @@ def process_video_camera2():
                     if check_car_cross_line3(MiddleCamBottomExitLine, cx, cy):
                         cv2.line(frame, (MiddleCamBottomExitLine[0], MiddleCamBottomExitLine[1]),
                                  (MiddleCamBottomExitLine[2], MiddleCamBottomExitLine[3]), (0, 255, 0), 5)
+                        if id in car_temp5 and id in car_dict and car_dict[id]["currentLocation"] == "MiddleCam" and car_dict[
+                            id].get("status") == "moving":
+                            car_temp5[id] = car_dict[id]
+
+                        else:
+                            car_temp5[id] = copy_car_dict.copy()
+                            car_temp5[id]["bbox"] = (x1, y1, x2, y2)
+
+                            car_temp5[id]["currentLocation"] = "MiddleCam"
 
                     # Draw Parking Box coordinate
                     draw_parking_lot_polylines(frame, ParkingLotCoordinateMidCam, showParkingLotBox, parking_lots,

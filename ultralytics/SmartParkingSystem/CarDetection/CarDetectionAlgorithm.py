@@ -84,7 +84,7 @@ def process_parking(coordinates, car_dict, id, cx, cy, parking_lot_name, parking
             duration = (current_time - car_data.get("parkingDetected", current_time)).seconds
             car_data["duration"] = duration
 
-            if duration > PARKING_TIME:
+            if duration > PARKING_TIME and car_data['parkingLot'] == parking_lot_name:
                 car_data["status"] = "parked"
                 parking_lots[parking_lot_name]["carId"] = id
                 parking_lots[parking_lot_name]["parked"] = "yes"
@@ -134,7 +134,7 @@ def process_double_parking(coordinates, car_dict, id, cx, cy, parking_lot_name, 
             duration = (current_time - car_data.get("parkingDetected", current_time)).seconds
             car_data["duration"] = duration
 
-            if duration > DOUBLE_PARK_TIME:
+            if duration > DOUBLE_PARK_TIME and car_data['parkingLot'] == parking_lot_name:
                 car_data["status"] = "parked"
                 double_parking_lots[parking_lot_name]["carId"] = id
                 double_parking_lots[parking_lot_name]["parked"] = "yes"
@@ -156,6 +156,7 @@ def process_double_parking(coordinates, car_dict, id, cx, cy, parking_lot_name, 
 
             else:
                 car_data["status"] = "moving"
+                double_parking_lots[parking_lot_name]["carId"] = "-"
 
         else:
             # Car entered the parking lot

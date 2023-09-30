@@ -22,7 +22,7 @@ reference_cap = cv2.VideoCapture(reference_video)
 reference_frame_rate = int(reference_cap.get(cv2.CAP_PROP_FPS))
 reference_cap.release()
 
-def synchronize_videos(video_cap, timestamp, reference_frame_time, window_name):
+def synchronize_videos(video_cap, timestamp, reference_frame_time, window_name, sync_event):
     while True:
         ret, frame = video_cap.read()
         if not ret or frame is None:
@@ -35,6 +35,12 @@ def synchronize_videos(video_cap, timestamp, reference_frame_time, window_name):
         # Calculate the target frame time based on reference frame rate
         target_time = reference_frame_time + (elapsed_time * reference_frame_rate)
 
+        # Wait until the synchronization event is set
+        sync_event.wait()
+
+        # Clear the synchronization event
+        sync_event.clear()
+
         # Wait until the target time is reached
         while (cv2.getTickCount() / cv2.getTickFrequency()) < target_time:
             pass
@@ -46,7 +52,6 @@ def synchronize_videos(video_cap, timestamp, reference_frame_time, window_name):
 
         if cv2.waitKey(1) & 0xFF == ord("q"):
             break
-
 
 def main():
     try:
@@ -86,17 +91,16 @@ def main():
         thread_camera2 = threading.Thread(target=process_video_camera2)
         thread_camera3 = threading.Thread(target=process_video_camera3)
 
-       # print("Start ALL Camera THREAD")
+        # Create Event objects for synchronization
+        video_sync_event = threading.Event()
+
         # Start the threads
         thread_camera1.start()
         thread_camera2.start()
         thread_camera3.start()
 
-        print("starting license plate thread")
         process_car_plate_video_thread.start()
 
-
-       # print("starting export thread")
         export_thread.start()
 
         # Open the reference video
@@ -109,12 +113,20 @@ def main():
                 break
 
             reference_timestamp = cv2.getTickCount()
-            synchronize_videos(cv2.VideoCapture("CarDetection/VideoFootage/middleCamera1080.mp4"), reference_timestamp, reference_timestamp, "Camera 2")
-            synchronize_videos(cv2.VideoCapture("CarDetection/VideoFootage/leftCamera1080.mp4"), reference_timestamp, reference_timestamp, "Camera 3")
-            synchronize_videos(cv2.VideoCapture("LicensePlateRecognition/entryCamera1080.mp4"), reference_timestamp, reference_timestamp, "OCR Detection")
 
+            # Set the synchronization event for all threads
+            video_sync_event.set()
 
-        #export_thread.join()
+            # Synchronize other videos
+            synchronize_videos(cv2.VideoCapture("CarDetection/VideoFootage/middleCamera1080.mp4"), reference_timestamp, reference_timestamp, "Camera 2", video_sync_event)
+            synchronize_videos(cv2.VideoCapture("CarDetection/VideoFootage/leftCamera1080.mp4"), reference_timestamp, reference_timestamp, "Camera 3", video_sync_event)
+            synchronize_videos(cv2.VideoCapture("LicensePlateRecognition/entryCamera1080.mp4"), reference_timestamp, reference_timestamp, "OCR Detection", video_sync_event)
+
+            # Clear the synchronization event for the next iteration
+            video_sync_event.clear()
+
+        # Wait for all threads to finish
+        export_thread.join()
         process_car_plate_video_thread.join()
         thread_camera1.join()
         thread_camera2.join()
