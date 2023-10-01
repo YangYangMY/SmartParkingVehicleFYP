@@ -2,16 +2,16 @@
  A final year project going under the topic of Smart Parking with Double Parking Tracking System.
  
 ## Hardware and Software Requirements
-CPU: Minimum of Intel Core-i5
-RAM: Minimum of 16GB RAM
-Graphic Card:  MUST HAVE Nvidia Graphic Cards
-Storage: Minimum of 20 GB free space
-Camera: Minimum of 1080p resolution
-Software Requirements
-OS: Window 10 and above
-Pycharm
-Conda environment (recommended)
-Microsoft Excel
+1. CPU: Minimum of Intel Core-i5
+2. RAM: Minimum of 16GB RAM
+3. Graphic Card:  MUST HAVE Nvidia Graphic Cards
+4. Storage: Minimum of 20 GB free space
+5. Camera: Minimum of 1080p resolution
+## Software Requirements
+1. OS: Window 10 and above
+2. Pycharm
+3.Conda environment (recommended)
+4. Microsoft Excel
 
 ### CUDA Installation
 Check if your computer has a CUDA-capable GPU. You can do this by going to the NVIDIA website and searching for your GPU model. If your GPU is listed, then it is CUDA-capable.
