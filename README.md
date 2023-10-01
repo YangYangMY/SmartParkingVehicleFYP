@@ -41,6 +41,9 @@ m. Click "OK" to close the Environment Variables window.
 11. fter everything is installed, you can run the following code to check if PyTorch and CUDA is installed correctly:
     print (torch.cuda.is_available()) 
 12. If it returns True, this means you have installed successfully.
+13. Download video footage from this link: ‘ https://drive.google.com/drive/folders/1qQMVkUNQrgM2_-2TwIAlrTfm-QLx212y?usp=drive_link’.
+14. Ensure the files are placed in the correct directory.
+
 
 ### Run code directly from Pycharm
 1. Run the main file directly in Main.py to start all the process automatically.
