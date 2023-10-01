@@ -1,6 +1,5 @@
 import logging
 import math
-import time
 
 import cvzone
 import numpy as np
@@ -13,7 +12,7 @@ import re
 pytesseract.pytesseract.tesseract_cmd = "LicensePlateRecognition/Tesseract-OCR/tesseract"
 
 model = YOLO("models/yolov8n.pt")
-licanese_plate_detector = YOLO("LicensePlateRecognition/models/license_plate_detector.pt")
+license_plate_detector = YOLO("LicensePlateRecognition/models/license_plate_detector.pt")
 
 # Define the list of classes that we want to detect
 classNames = ["person", "bicycle", "car", "motorbike", "aeroplane", "bus", "train", "truck", "boat",
@@ -55,8 +54,8 @@ clear_detection_region = [(1, 329), (560, 329), (560, 600), (1, 600)]
 
 
 stop_all_func = False
-car_exist = False
-car_plate_exist = False
+# car_exist = False
+# car_plate_exist = False
 most_frequent_result = ""
 temp = ""
 
@@ -139,7 +138,7 @@ def retrieve_ocr_result():
 
 
 def car_plate_video():
-    global stop_all_func, temp, car_exist, car_plate_exist
+    global stop_all_func, temp
     global most_frequent_result, final_ocr_results
     unknown_stored = False
 
@@ -159,7 +158,7 @@ def car_plate_video():
                 car_detection(frame)
 
                 # Detect license plate
-                plateDetections = licanese_plate_detector(frame, stream=True, verbose=False)
+                plateDetections = license_plate_detector(frame, stream=True, verbose=False)
 
                 for plateDetection in plateDetections:
                     boxes = plateDetection.boxes
@@ -188,7 +187,7 @@ def car_plate_video():
                             if x1 >= bbox_x1 and y1 >= bbox_y1 and x2 <= bbox_x2 and y2 <= bbox_y2:
                                 # print("Plate Detected in region.")
                                 cropped = frame[y1:y2, x1:x2]
-                                car_plate_exist = True
+                                # car_plate_exist = True
 
                                 # -------- Preprocess cropped license plate ---------
                                 gray = cv2.cvtColor(cropped, cv2.COLOR_BGR2GRAY)

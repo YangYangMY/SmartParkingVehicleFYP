@@ -1,11 +1,9 @@
 import logging
 import math
 import os
-import timeit
 from datetime import datetime
 
 import cv2
-import threading
 import time
 import xlwings as xw
 import cvzone
