@@ -2,7 +2,6 @@
  A final year project going under the topic of Smart Parking with Double Parking Tracking System.
  
 ## Hardware and Software Requirements
-### Hardware Requirements
 CPU: Minimum of Intel Core-i5
 RAM: Minimum of 16GB RAM
 Graphic Card:  MUST HAVE Nvidia Graphic Cards
@@ -14,7 +13,6 @@ Pycharm
 Conda environment (recommended)
 Microsoft Excel
 
-## Installations
 ### CUDA Installation
 Check if your computer has a CUDA-capable GPU. You can do this by going to the NVIDIA website and searching for your GPU model. If your GPU is listed, then it is CUDA-capable.
 Download the NVIDIA CUDA Toolkit. You can download the CUDA Toolkit from the NVIDIA website. Select the appropriate version for your operating system and architecture.
