@@ -26,7 +26,7 @@ from SmartParkingSystem.CarDetection.config import modelm, classNames, tracker, 
     car_temp2, ParkingLotCoordinateMidCam, DoubleParkCoordinateMidCam, parking_lots_data_mid_cam, \
     LeftCamMiddleEntryLine, LeftCamMiddleExitLine, LeftCamBottomEntryLine, LeftCamBottomExitLine, car_temp8, car_temp6, \
     car_temp5, ParkingLotCoordinateLeftCam, DoubleParkCoordinateLeftCam, parking_lots_data_left_cam
-from SmartParkingSystem.LicensePlateRecognition.LicensePlateRecognition import retreive_ocr_result, final_ocr_results
+from SmartParkingSystem.LicensePlateRecognition.LicensePlateRecognition import retrieve_ocr_result, final_ocr_results
 
 # Shared Variable
 # Create a shared variable to control all the function
@@ -142,7 +142,7 @@ def process_video_camera1():
                             car_dict[id]["currentLocation"] = "RightCam"
                             if car_dict[id].get("carPlate") == "-":
                                 print("Original Car Plate:", car_dict[id]["carPlate"])
-                                car_dict[id]["carPlate"] = retreive_ocr_result()
+                                car_dict[id]["carPlate"] = retrieve_ocr_result()
                                 print("Car Plate:", car_dict[id]["carPlate"])
                                 print("CAR LIST:", final_ocr_results)
 
