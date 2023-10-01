@@ -43,8 +43,7 @@ m. Click "OK" to close the Environment Variables window.
 12. If it returns True, this means you have installed successfully.
 
 ### Run code directly from Pycharm
-
-Run the main file directly in Main.py to start all the process automatically.
-Wait for a few seconds, Microsoft Excel with all the other 4 window frames will be  shown.
-You can check the live updates of Microsoft Excel through the opened file.
-This page is intentionally left blank to indicate the back cover. Ensure that the back cover is black in color.
+1. Run the main file directly in Main.py to start all the process automatically.
+2. Wait for a few seconds, Microsoft Excel with all the other 4 window frames will be  shown.
+3. You can check the live updates of Microsoft Excel through the opened file.
+4. This page is intentionally left blank to indicate the back cover. Ensure that the back cover is black in color.
