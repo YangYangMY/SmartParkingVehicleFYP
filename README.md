@@ -1,6 +1,6 @@
 # SmartParkingVehicleFYP
  Final Year Project with uses library from YOLO v8 and SORT function. from other github repo.
-Hardware and Software Requirements
+ Hardware and Software Requirements
 Hardware Requirements
 CPU: Minimum of Intel Core-i5
 RAM: Minimum of 16GB RAM
