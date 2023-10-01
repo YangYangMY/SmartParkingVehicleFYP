@@ -1,7 +1,8 @@
 # SmartParkingVehicleFYP
- Final Year Project with uses library from YOLO v8 and SORT function. from other github repo.
- Hardware and Software Requirements
-Hardware Requirements
+ A final year project going under the topic of Smart Parking with Double Parking Tracking System.
+ 
+# Hardware and Software Requirements
+<h1>Hardware Requirements</h1>
 CPU: Minimum of Intel Core-i5
 RAM: Minimum of 16GB RAM
 Graphic Card:  MUST HAVE Nvidia Graphic Cards
@@ -13,8 +14,8 @@ Pycharm
 Conda environment (recommended)
 Microsoft Excel
 
-Installations
-CUDA Installation
+# Installations
+<h1>CUDA Installation</h1>
 Check if your computer has a CUDA-capable GPU. You can do this by going to the NVIDIA website and searching for your GPU model. If your GPU is listed, then it is CUDA-capable.
 Download the NVIDIA CUDA Toolkit. You can download the CUDA Toolkit from the NVIDIA website. Select the appropriate version for your operating system and architecture.
 Install the NVIDIA CUDA Toolkit. Once you have downloaded the CUDA Toolkit, double-click on the installer file to start the installation process. Follow the on-screen instructions to complete the installation.
@@ -43,7 +44,7 @@ After everything is installed, you can run the following code to check if PyTorc
 print (torch.cuda.is_available()) 
 If it returns True, this means you have installed successfully.
 
-Run code directly from Pycharm
+<h1>Run code directly from Pycharm</h1>
 
 Run the main file directly in Main.py to start all the process automatically.
 Wait for a few seconds, Microsoft Excel with all the other 4 window frames will be  shown.
