@@ -14,33 +14,33 @@
 4. Microsoft Excel
 
 ### CUDA Installation
-Check if your computer has a CUDA-capable GPU. You can do this by going to the NVIDIA website and searching for your GPU model. If your GPU is listed, then it is CUDA-capable.
-Download the NVIDIA CUDA Toolkit. You can download the CUDA Toolkit from the NVIDIA website. Select the appropriate version for your operating system and architecture.
-Install the NVIDIA CUDA Toolkit. Once you have downloaded the CUDA Toolkit, double-click on the installer file to start the installation process. Follow the on-screen instructions to complete the installation.
-Set the CUDA environment variables. Once the CUDA Toolkit is installed, you need to set the CUDA environment variables. This will tell your computer where to find the CUDA Toolkit files. To set the CUDA environment variables, follow these steps:
-Open the Control Panel.
-Click on "System and Security".
-Click on "System".
-Click on "Advanced system settings".
-Under "Environment Variables", click on "New".
-In the "Variable name" field, type "CUDA_PATH".
-In the "Variable value" field, type the path to the CUDA Toolkit installation directory.
-Click "OK".
-Click on "New" again.
-In the "Variable name" field, type "CUDA_BIN_PATH".
-In the "Variable value" field, type the path to the CUDA Toolkit bin directory.
-Click "OK".
-Click "OK" to close the Environment Variables window.
-Installing all necessary packages
-Download and unzip the code.
-Open the code in Pycharm.
-Install all the necessary libraries in requirements.txt through the code:
-‘ pip install -r requirements.txt’
-For PyTorch, you need to check the CUDA version you have installed and install the correct version of Pytorch through the following link:
-‘https://pytorch.org/get-started/locally/’
-After everything is installed, you can run the following code to check if PyTorch and CUDA is installed correctly:
-print (torch.cuda.is_available()) 
-If it returns True, this means you have installed successfully.
+1. Check if your computer has a CUDA-capable GPU. You can do this by going to the NVIDIA website and searching for your GPU model. If your GPU is listed, then it is CUDA-capable.
+2. Download the NVIDIA CUDA Toolkit. You can download the CUDA Toolkit from the NVIDIA website. Select the appropriate version for your operating system and architecture.
+3. Install the NVIDIA CUDA Toolkit. Once you have downloaded the CUDA Toolkit, double-click on the installer file to start the installation process. Follow the on-screen instructions to complete the installation.
+4. Set the CUDA environment variables. Once the CUDA Toolkit is installed, you need to set the CUDA environment variables. This will tell your computer where to find the CUDA Toolkit files. To set the CUDA environment variables, follow these steps:
+  a. Open the Control Panel.
+  b. Click on "System and Security".
+  c. Click on "System".
+  d. Click on "Advanced system settings".
+  e.Under "Environment Variables", click on "New".
+  f. In the "Variable name" field, type "CUDA_PATH".
+  g. In the "Variable value" field, type the path to the CUDA Toolkit installation directory.
+  h. Click "OK".
+  i. Click on "New" again.
+  j. In the "Variable name" field, type "CUDA_BIN_PATH".
+  k. In the "Variable value" field, type the path to the CUDA Toolkit bin directory.
+  l. Click "OK".
+  m. Click "OK" to close the Environment Variables window.
+5. Installing all necessary packages
+6. Download and unzip the code.
+7. Open the code in Pycharm.
+8. Install all the necessary libraries in requirements.txt through the code:
+   ‘pip install -r requirements.txt’
+9. For PyTorch, you need to check the CUDA version you have installed and install the correct version of Pytorch through the following link:
+   ‘https://pytorch.org/get-started/locally/’
+10. fter everything is installed, you can run the following code to check if PyTorch and CUDA is installed correctly:
+    print (torch.cuda.is_available()) 
+11. If it returns True, this means you have installed successfully.
 
 ### Run code directly from Pycharm
 
